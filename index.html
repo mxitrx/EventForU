@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thai Craft Symposium 2025</title>
+    
+    <!-- Tailwind CSS & Theme Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', 
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#FDFBF7',       
+                            dark: '#0A0D14',     
+                            orange: '#F97316',   
+                            blue: '#3B82F6',     
+                            green: '#10B981',    
+                            pink: '#EC4899',     
+                            border: '#E5E7EB',   
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    boxShadow: {
+                        'premium': '0 20px 40px -10px rgba(0, 0, 0, 0.08)',
+                        'premium-dark': '0 20px 40px -10px rgba(249, 115, 22, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        
+        /* Typography & Core */
+        body { overflow-x: hidden; transition: background-color 0.4s ease, color 0.4s ease; }
+        .text-heading { font-family: 'Playfair Display', serif; }
+        
+        /* Custom UI Controls */
+        /* --- TICKET ANIMATIONS & UI CONTROLS --- */
+        
+        /* 1. การ์ดที่ถูกเลือก: ให้เด้งขึ้น ขยายตัวเล็กน้อย และขอบเรืองแสงกระพริบ */
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 0 2px #F97316, 0 15px 30px -5px rgba(249, 115, 22, 0.2); }
+            100% { box-shadow: 0 0 0 2px #F97316, 0 20px 45px 10px rgba(249, 115, 22, 0.4); }
+        }
+        .ticket-radio:checked + div {
+            border-color: #F97316 !important;
+            animation: glowPulse 2s infinite alternate ease-in-out !important;
+            transform: translateY(-8px) scale(1.02) !important;
+            z-index: 20;
+        }
+
+        /* 2. ป้ายข้อความลอยขึ้นลงเบาๆ */
+        @keyframes floatBadge {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+        .badge-float { 
+            animation: floatBadge 3s ease-in-out infinite; 
+        }
+
+        /* 3. ไอคอนเครื่องหมายถูกขยับเมื่อชี้เมาส์ที่การ์ด */
+        .premium-card ul li svg { 
+            transition: transform 0.3s ease, color 0.3s ease; 
+        }
+        .premium-card:hover ul li svg { 
+            transform: translateX(4px) scale(1.15); 
+            color: #F97316; 
+        }
+
+        /* 4. แสงวิ่งพาดผ่านสำหรับบัตร VIP */
+        @keyframes shimmerSweep {
+            0% { transform: translateX(-150%) skewX(-45deg); }
+            100% { transform: translateX(250%) skewX(-45deg); }
+        }
+        .vip-shimmer {
+            position: absolute;
+            top: 0; left: 0; width: 60%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 100%);
+            animation: shimmerSweep 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* การบังคับให้ QR Code สมบูรณ์ */
+        #qrcode canvas { display: none !important; }
+        #qrcode img { display: block !important; margin: auto; }
+
+        /* --- PREMIUM ANIMATIONS & FX --- */
+        .premium-card { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .premium-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); }
+        html.dark .premium-card:hover { box-shadow: 0 25px 50px -12px rgba(249, 115, 22, 0.15); border-color: rgba(249, 115, 22, 0.3); }
+        
+        /* Magnetic Button Effect */
+        .magnetic-btn { display: inline-flex; align-items: center; justify-content: center; will-change: transform; transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1); }
+
+        .parallax-wrapper { overflow: hidden; border-radius: 1.5rem; position: relative; }
+        .parallax-img { transition: transform 0.1s linear; transform: scale(1.1); will-change: transform; }
+
+        .typewriter-text { border-right: 2px solid #F97316; white-space: nowrap; overflow: hidden; animation: blinkCursor 0.7s steps(44) infinite normal; }
+        @keyframes blinkCursor { from { border-right-color: #F97316; } to { border-right-color: transparent; } }
+
+        .particle { position: fixed; border-radius: 50%; pointer-events: none; z-index: -1; filter: blur(4px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        /* --- Seamless Marquee Animation --- */
+        .marquee-container { display: flex; width: 200%; animation: marquee-slide 25s linear infinite; }
+        .sponsor-track { display: flex; width: max-content; animation: sponsor-marquee-slide 35s linear infinite; }
+        .marquee-container:hover, .sponsor-track:hover { animation-play-state: paused; }
+        @keyframes marquee-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes sponsor-marquee-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Elegant Accordion (FAQ) */
+        .faq-answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .faq-answer > div { overflow: hidden; }
+        .faq-item.active .faq-answer { grid-template-rows: 1fr; margin-top: 1rem; }
+        .faq-item.active .faq-icon { transform: rotate(180deg); color: #F97316; }
+
+        /* ซ่อน Scrollbar ทั้งหน้าเว็บเพื่อให้ดูคลีน แต่ยังเลื่อนได้ตามปกติ */
+        ::-webkit-scrollbar { display: none; }
+        html, body { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Mobile Menu Lock Scroll */
+        body.menu-open { overflow: hidden; }
+
+        /* --- แบบที่ 5: ลายประจำยามมินิมอล (Minimalist Prajamyam) --- */
+        .thai-pattern-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath d='M30 5L55 30L30 55L5 30Z M30 15L45 30L30 45L15 30Z M30 0V60 M0 30H60'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat; background-size: 90px; 
+            opacity: 0.03; pointer-events: none; transition: all 0.5s ease;
+        }
+        html.dark .thai-pattern-bg {
+            opacity: 0.12; 
+            filter: invert(65%) sepia(100%) saturate(500%) hue-rotate(350deg) brightness(1.2); 
+            mix-blend-mode: screen;
+        }
+    </style>
+
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="bg-[#FDFBF7] dark:bg-brand-dark text-gray-800 dark:text-gray-200 antialiased selection:bg-brand-orange selection:text-white transition-colors duration-500">
+
+    <!-- พื้นหลังลายไทย -->
+    <div class="thai-pattern-bg"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-white/80 dark:bg-brand-dark/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 transition-all duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="window.scrollTo(0,0)">
+                    <div class="w-1.5 h-6 bg-brand-orange rounded-full group-hover:h-8 transition-all duration-300 shadow-[0_0_12px_#F97316]"></div>
+                    <span class="text-heading font-bold text-xl tracking-tight text-brand-dark dark:text-white leading-none flex flex-col">
+                        THAI CRAFT
+                        <span class="text-[9px] tracking-[0.25em] font-sans text-brand-orange font-bold uppercase mt-1">Symposium 2025</span>
+                    </span>
+                </div>
+                
+                <!-- Desktop Links -->
+                <div class="hidden lg:flex space-x-10 text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <a href="#about" class="nav-link text-brand-orange transition flex items-center gap-1 group">หน้าแรก <span class="nav-dot w-1 h-1 rounded-full bg-brand-orange opacity-100 transition-all"></span></a>
+                    <a href="#concept" class="nav-link hover:text-brand-orange transition flex items-center gap-1 group">แนวคิด <span class="nav-dot w-1 h-1 rounded-full bg-brand-orange opacity-0 group-hover:opacity-100 transition-all"></span></a>
+                    <a href="#speakers" class="nav-link hover:text-brand-orange transition flex items-center gap-1 group">วิทยากร <span class="nav-dot w-1 h-1 rounded-full bg-brand-orange opacity-0 group-hover:opacity-100 transition-all"></span></a>
+                    <a href="#schedule" class="nav-link hover:text-brand-orange transition flex items-center gap-1 group">กำหนดการ <span class="nav-dot w-1 h-1 rounded-full bg-brand-orange opacity-0 group-hover:opacity-100 transition-all"></span></a>
+                    <a href="#register" class="nav-link hover:text-brand-orange transition flex items-center gap-1 group">ลงทะเบียน <span class="nav-dot w-1 h-1 rounded-full bg-brand-orange opacity-0 group-hover:opacity-100 transition-all"></span></a>
+                </div>
+                
+                <!-- CTA & Theme Toggle -->
+                <div class="flex items-center gap-3 md:gap-4">
+                    <button onclick="toggleTheme()" class="p-2.5 rounded-full bg-gray-100/50 dark:bg-gray-800/50 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 focus:outline-none backdrop-blur-sm border border-transparent dark:border-gray-700">
+                        <!-- ดวงอาทิตย์ (โหมดสว่าง) - กดแล้วเปลี่ยนเป็นโหมดมืด -->
+                        <svg class="w-4 h-4 hidden dark:block text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <!-- พระจันทร์เสี้ยว (โหมดมืด) - กดแล้วเปลี่ยนเป็นโหมดสว่าง -->
+                        <svg class="w-4 h-4 block dark:hidden text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                    
+                    <a href="#register" class="magnetic-btn bg-brand-orange text-white px-5 md:px-6 py-2.5 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 rounded-full shadow-[0_8px_20px_-4px_rgba(249,115,22,0.4)] hidden sm:flex items-center gap-2 group">
+                        ลงทะเบียน <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+
+                    <!-- Hamburger Menu Button -->
+                    <button id="mobileMenuBtn" class="lg:hidden p-2 text-brand-dark dark:text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="fixed inset-0 z-[100] bg-white/95 dark:bg-brand-dark/95 backdrop-blur-xl transform translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8 text-2xl font-heading font-bold text-brand-dark dark:text-white">
+        <button id="closeMenuBtn" class="absolute top-6 right-6 p-2 text-gray-500 hover:text-brand-orange transition-colors">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <a href="#about" class="mobile-nav-link mobile-link text-brand-orange transition-colors">หน้าแรก</a>
+        <a href="#concept" class="mobile-nav-link mobile-link hover:text-brand-orange transition-colors">แนวคิด</a>
+        <a href="#speakers" class="mobile-nav-link mobile-link hover:text-brand-orange transition-colors">วิทยากร</a>
+        <a href="#schedule" class="mobile-nav-link mobile-link hover:text-brand-orange transition-colors">กำหนดการ</a>
+        <a href="#register" class="mobile-link bg-brand-orange text-white px-8 py-3 rounded-full text-lg mt-4 shadow-[0_8px_20px_-4px_rgba(249,115,22,0.4)]">ลงทะเบียนทันที</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="about" class="pt-32 md:pt-40 pb-20 px-4 max-w-7xl mx-auto relative overflow-hidden md:overflow-visible">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 relative z-10 items-center">
+            <!-- Left Info -->
+            <div class="lg:col-span-7 mt-8 md:mt-0" data-aos="fade-up" data-aos-duration="1000">
+                <div class="inline-flex items-center gap-2 bg-orange-50/80 dark:bg-orange-500/10 border border-orange-100 dark:border-orange-500/20 text-brand-orange text-[9px] md:text-[10px] font-bold tracking-widest uppercase mb-6 md:mb-8 px-4 py-2 rounded-full backdrop-blur-sm transition-colors">
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-orange animate-ping absolute"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-orange relative"></span>
+                    The Premier Craft & Innovation Symposium
+                </div>
+                
+                <h1 class="text-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-brand-dark dark:text-white leading-[1.15] md:leading-[1.1] mb-6 transition-colors">
+                    THAI CRAFT<br>
+                    <span class="font-sans text-2xl sm:text-3xl md:text-5xl text-brand-orange font-semibold typewriter-text inline-block mt-2" id="typingText"></span><br>
+                    <span class="text-brand-blue dark:text-blue-400 text-lg md:text-2xl font-medium font-sans tracking-wide mt-2 block opacity-80">(Deconstructing & Re-crafting Heritage)</span>
+                </h1>
+                
+                <p class="text-gray-500 dark:text-gray-400 mb-8 md:mb-10 max-w-xl leading-relaxed text-sm md:text-base font-light transition-colors">
+                    เวทีระดับสากลที่รวบรวมช่างฝีมือระดับครู นักออกแบบยุคใหม่ และนักวิจัยวัสดุ 
+                    มาตั้งคำถามถึงนิยามของ "งานคราฟต์" เพื่อต่อยอดจากรากเหง้าดั้งเดิม สู่การประยุกต์ใช้อย่างยั่งยืนใน 1 วันเต็ม
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                    <a href="#register" class="magnetic-btn w-full sm:w-auto bg-brand-dark dark:bg-white text-white dark:text-brand-dark px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all duration-300 rounded-full hover:scale-105 shadow-xl flex items-center justify-center gap-3 group">
+                        สำรองที่นั่ง <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 font-medium transition-colors flex items-center gap-3 sm:block">
+                        <div class="w-10 h-10 sm:hidden rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"><svg class="w-5 h-5 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
+                        <div>
+                            <span class="block text-brand-dark dark:text-white font-bold text-base md:text-lg">10 ตุลาคม 2025</span>
+                            BACC Bangkok
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Image Parallax -->
+            <div class="lg:col-span-5 w-full mt-10 lg:mt-0" data-aos="fade-left" data-aos-duration="1200" data-aos-delay="200">
+                <div class="w-full h-[350px] md:h-[550px] shadow-2xl border-[6px] border-white dark:border-[#111827] group transition-colors rounded-[1.5rem] relative overflow-hidden">
+                    
+                    <!-- ลบ id="heroImg" และ parallax-img ออก เพื่อหยุดการขยับ -->
+                    <img src="https://i0.wp.com/thaiarchiculture.com/wp-content/uploads/2024/05/praprohm-w.jpg?fit=700%2C907&ssl=1" class="w-full h-full" alt="Thai Craft">
+                    
+                    <!-- Floating Glass Card -->
+                    <div class="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 p-4 md:p-6 bg-white/80 dark:bg-brand-dark/80 backdrop-blur-lg rounded-2xl shadow-xl transform translate-y-2 group-hover:translate-y-0 transition duration-500 border border-white/50 dark:border-gray-700/50">
+                        <div class="flex items-center gap-3 mb-1.5 md:mb-2">
+                            <span class="flex h-2.5 w-2.5 md:h-3 md:w-3 relative">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-brand-green"></span>
+                            </span>
+                            <div class="text-brand-dark dark:text-white text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-colors">Masterclass Update</div>
+                        </div>
+                        <div class="text-brand-orange text-xs md:text-sm font-bold font-sans leading-tight">สถาปัตยกรรมไทย</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Infinite Marquee (News Ticker - Top) -->
+    <div class="w-full overflow-hidden bg-brand-dark py-3 border-y border-gray-800 relative z-10 transition-colors pointer-events-none">
+        <div class="marquee-container text-white text-[9px] md:text-[10px] font-bold tracking-widest uppercase items-center opacity-80">
+            <!-- First Set -->
+            <div class="flex justify-around items-center w-max md:w-1/2 shrink-0 pr-8">
+                <span class="text-brand-orange flex items-center gap-2 shrink-0">🔥 Early Bird Tickets Ending Soon</span>
+                <span class="text-gray-700 mx-4 md:mx-6 shrink-0">•</span>
+                <span class="shrink-0">Thai Craft Symposium 2025</span>
+                <span class="text-gray-700 mx-4 md:mx-6 shrink-0">•</span>
+                <span class="text-brand-green shrink-0">Only 10 Seats left for Masterclass</span>
+                <span class="text-gray-700 mx-4 md:mx-6 shrink-0">•</span>
+                <span class="shrink-0">BACC Bangkok</span>
+                <span class="text-gray-700 mx-4 md:mx-6 shrink-0">•</span>
+            </div>
+            <!-- Duplicate Set -->
+            <div class="flex justify-around items-center w-max md:w-1/2 shrink-0 pr-8">
+                <span class="text-brand-orange flex items-center gap-2 shrink-0">🔥 Early Bird Tickets Ending Soon</span>
+                <span class="text-gray-700 mx-4 md:mx-6 shrink-0">•</span>
+                <span class="shrink-0">Thai Craft Symposium 2025</span>
+                <span class="text-gray-700 mx-4 md:mx-6 shrink-0">•</span>
+                <span class="text-brand-green shrink-0">Only 10 Seats left for Masterclass</span>
+                <span class="text-gray-700 mx-4 md:mx-6 shrink-0">•</span>
+                <span class="shrink-0">BACC Bangkok</span>
+                <span class="text-gray-700 mx-4 md:mx-6 shrink-0">•</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Concept Section -->
+    <section id="concept" class="py-16 md:py-24 bg-white dark:bg-gray-950 relative overflow-hidden transition-colors border-b border-gray-100 dark:border-gray-900">
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] md:w-[800px] h-[500px] md:h-[800px] bg-orange-50/50 dark:bg-brand-orange/5 rounded-full blur-[80px] md:blur-[100px] pointer-events-none transition-colors"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-16 md:mb-20" data-aos="fade-up">
+                <div class="text-brand-orange text-[10px] font-bold tracking-widest uppercase mb-4">The Core Concept</div>
+                <h2 class="text-heading text-3xl md:text-5xl text-brand-dark dark:text-white mb-6 transition-colors">Deconstructing & Re-crafting</h2>
+                <div class="w-16 h-1 bg-brand-orange mx-auto mb-6 rounded-full"></div>
+                <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-light transition-colors px-2">
+                    ถอดรหัสงานช่างฝีมือดั้งเดิมเพื่อค้นหาแก่นแท้ของภูมิปัญญา และนำมาประกอบร่างใหม่ผ่านนวัตกรรมวัสดุศาสตร์และเทคโนโลยีการออกแบบ เชื่อมโยงผู้คนจากหลากหลายศาสตร์เข้าด้วยกัน
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                <div class="bg-[#FDFBF7] dark:bg-[#111827] p-6 md:p-8 rounded-3xl premium-card border border-transparent dark:border-gray-800 text-center transition-colors" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-white dark:bg-gray-800 shadow-sm text-brand-orange rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 text-xl md:text-2xl border border-gray-100 dark:border-gray-700 transition-colors">🎨</div>
+                    <h3 class="font-bold text-brand-dark dark:text-white text-base md:text-lg mb-2 md:mb-3 transition-colors">Creative Designers</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-light transition-colors">นักออกแบบที่ต้องการหาแรงบันดาลใจและต่อยอดการใช้วัสดุท้องถิ่นในงานดีไซน์ร่วมสมัย</p>
+                </div>
+                <div class="bg-[#FDFBF7] dark:bg-[#111827] p-6 md:p-8 rounded-3xl premium-card border border-transparent dark:border-gray-800 text-center transition-colors" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-white dark:bg-gray-800 shadow-sm text-brand-blue rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 text-xl md:text-2xl border border-gray-100 dark:border-gray-700 transition-colors">⚒️</div>
+                    <h3 class="font-bold text-brand-dark dark:text-white text-base md:text-lg mb-2 md:mb-3 transition-colors">Master Artisans</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-light transition-colors">ช่างฝีมือและชุมชนที่ต้องการนำภูมิปัญญาดั้งเดิมมาปรับใช้เพื่อเข้าสู่ตลาดสากลยุคใหม่</p>
+                </div>
+                <div class="bg-[#FDFBF7] dark:bg-[#111827] p-6 md:p-8 rounded-3xl premium-card border border-transparent dark:border-gray-800 text-center transition-colors" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-white dark:bg-gray-800 shadow-sm text-brand-green rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 text-xl md:text-2xl border border-gray-100 dark:border-gray-700 transition-colors">🔬</div>
+                    <h3 class="font-bold text-brand-dark dark:text-white text-base md:text-lg mb-2 md:mb-3 transition-colors">Material Researchers</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-light transition-colors">นักวิจัยที่สนใจนวัตกรรม การทดสอบ และคุณสมบัติเชิงลึกของวัสดุธรรมชาติ</p>
+                </div>
+                <div class="bg-[#FDFBF7] dark:bg-[#111827] p-6 md:p-8 rounded-3xl premium-card border border-transparent dark:border-gray-800 text-center transition-colors" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-white dark:bg-gray-800 shadow-sm text-brand-pink rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 text-xl md:text-2xl border border-gray-100 dark:border-gray-700 transition-colors">💼</div>
+                    <h3 class="font-bold text-brand-dark dark:text-white text-base md:text-lg mb-2 md:mb-3 transition-colors">Entrepreneurs</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-light transition-colors">ผู้ประกอบการธุรกิจสร้างสรรค์ที่มองหาโอกาสและเครือข่ายความร่วมมือใหม่ๆ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speakers Section -->
+    <section id="speakers" class="py-16 md:py-24 bg-white dark:bg-gray-950 transition-colors border-b border-gray-100 dark:border-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-16 gap-4 md:gap-6 border-b border-gray-100 dark:border-gray-800 pb-6 transition-colors">
+                <div>
+                    <div class="text-brand-orange text-[10px] font-bold tracking-widest uppercase mb-3">The Visionaries</div>
+                    <h2 class="text-heading text-3xl md:text-5xl text-brand-dark dark:text-white transition-colors">Voices of Craft & Science</h2>
+                </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 font-light mb-2 hidden md:block transition-colors">* คลิกที่รูปเพื่อดูรายละเอียดเพิ่มเติม</p>
+            </div>
+
+            <!-- จัด Grid เป็น lg:grid-cols-3 (3 คอลัมน์) สำหรับ 6 คน -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <!-- Speaker Card 1 -->
+                <div class="group cursor-pointer premium-card bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 p-3 rounded-[2rem] shadow-sm hover:shadow-xl transition-all" data-aos="fade-up" onclick="openSpeakerModal('speaker1')">
+                    <div class="h-64 md:h-72 overflow-hidden rounded-[1.5rem] mb-4 relative bg-gray-100 dark:bg-gray-800 transition-colors">
+                        <img src="1.jpg" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur text-brand-blue text-[9px] font-bold px-3 py-1.5 tracking-widest uppercase rounded-full transition-colors border border-transparent dark:border-gray-700">science</div>
+                        <div class="absolute inset-0 bg-brand-blue/10 opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none"></div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <div class="text-[9px] text-gray-400 uppercase tracking-widest mb-1 font-bold transition-colors">69050139</div>
+                        <h3 class="text-lg md:text-xl font-bold text-brand-dark dark:text-white mb-1 font-serif transition-colors group-hover:text-brand-blue dark:group-hover:text-brand-blue">คุณณภัทร จุฑาทิพรัตน์</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-light transition-colors truncate">ครูช่างศิลปหัตถกรรม เครื่องเงินวัวลาย</p>
+                    </div>
+                </div>
+
+                <!-- Speaker Card 2 -->
+                <div class="group cursor-pointer premium-card bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 p-3 rounded-[2rem] shadow-sm hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="100" onclick="openSpeakerModal('speaker2')">
+                    <div class="h-64 md:h-72 overflow-hidden rounded-[1.5rem] mb-4 relative bg-gray-100 dark:bg-gray-800 transition-colors">
+                        <img src="2.jpg" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur text-brand-orange text-[9px] font-bold px-3 py-1.5 tracking-widest uppercase rounded-full transition-colors border border-transparent dark:border-gray-700">ART AND DESIGN</div>
+                        <div class="absolute inset-0 bg-brand-orange/10 opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none"></div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <div class="text-[9px] text-gray-400 uppercase tracking-widest mb-1 font-bold transition-colors">67020474</div>
+                        <h3 class="text-lg md:text-xl font-bold text-brand-dark dark:text-white mb-1 font-serif transition-colors group-hover:text-brand-orange dark:group-hover:text-brand-orange">คุณกิรณา กังวาฬวงษ์</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-light transition-colors truncate">สถาบันวิจัยโลหะและวัสดุแห่งชาติ</p>
+                    </div>
+                </div>
+
+                <!-- Speaker Card 3 -->
+                <div class="group cursor-pointer premium-card bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 p-3 rounded-[2rem] shadow-sm hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="200" onclick="openSpeakerModal('speaker3')">
+                    <div class="h-64 md:h-72 overflow-hidden rounded-[1.5rem] mb-4 relative bg-gray-100 dark:bg-gray-800 transition-colors">
+                        <img src="3.jpg" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur text-brand-orange text-[9px] font-bold px-3 py-1.5 tracking-widest uppercase rounded-full transition-colors border border-transparent dark:border-gray-700">ART AND DESIGN</div>
+                        <div class="absolute inset-0 bg-brand-orange/10 opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none"></div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <div class="text-[9px] text-gray-400 uppercase tracking-widest mb-1 font-bold transition-colors">67020497</div>
+                        <h3 class="text-lg md:text-xl font-bold text-brand-dark dark:text-white mb-1 font-serif transition-colors group-hover:text-brand-orange dark:group-hover:text-brand-orange">คุณธัญญวรรณ แช่มชื่น</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-light transition-colors truncate">สถาบันวิจัยโลหะและวัสดุแห่งชาติ</p>
+                    </div>
+                </div>
+
+                <!-- Speaker Card 4 -->
+                <div class="group cursor-pointer premium-card bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 p-3 rounded-[2rem] shadow-sm hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="300" onclick="openSpeakerModal('speaker4')">
+                    <div class="h-64 md:h-72 overflow-hidden rounded-[1.5rem] mb-4 relative bg-gray-100 dark:bg-gray-800 transition-colors">
+                        <img src="4.jpg" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur text-brand-orange text-[9px] font-bold px-3 py-1.5 tracking-widest uppercase rounded-full transition-colors border border-transparent dark:border-gray-700">ART AND DESIGN</div>
+                        <div class="absolute inset-0 bg-brand-orange/10 opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none"></div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <div class="text-[9px] text-gray-400 uppercase tracking-widest mb-1 font-bold transition-colors">67020358</div>
+                        <h3 class="text-lg md:text-xl font-bold text-brand-dark dark:text-white mb-1 font-serif transition-colors group-hover:text-brand-orange dark:group-hover:text-brand-orange">คุณวารินทร์ทิพย์ แก้วอินต๊ะ </h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-light transition-colors truncate">Creative Director & Innovator</p>
+                    </div>
+                </div>
+
+                <!-- Speaker Card 5 -->
+                <div class="group cursor-pointer premium-card bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 p-3 rounded-[2rem] shadow-sm hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="400" onclick="openSpeakerModal('speaker5')">
+                    <div class="h-64 md:h-72 overflow-hidden rounded-[1.5rem] mb-4 relative bg-gray-100 dark:bg-gray-800 transition-colors">
+                        <img src="5.jpg" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur text-brand-orange text-[9px] font-bold px-3 py-1.5 tracking-widest uppercase rounded-full transition-colors border border-transparent dark:border-gray-700">ART AND DESIGN</div>
+                        <div class="absolute inset-0 bg-brand-orange/10 opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none"></div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <div class="text-[9px] text-gray-400 uppercase tracking-widest mb-1 font-bold transition-colors">67020529</div>
+                        <h3 class="text-lg md:text-xl font-bold text-brand-dark dark:text-white mb-1 font-serif transition-colors group-hover:text-brand-orange dark:group-hover:text-brand-orange">คุณศุภาวิตา พิรักษา</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-light transition-colors truncate">นักพัฒนานวัตกรรมวัสดุธรรมชาติ</p>
+                    </div>
+                </div>
+
+                <!-- Speaker Card 6 -->
+                <div class="group cursor-pointer premium-card bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 p-3 rounded-[2rem] shadow-sm hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="500" onclick="openSpeakerModal('speaker6')">
+                    <div class="h-64 md:h-72 overflow-hidden rounded-[1.5rem] mb-4 relative bg-gray-100 dark:bg-gray-800 transition-colors">
+                        <img src="6.jpg" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur text-brand-green text-[9px] font-bold px-3 py-1.5 tracking-widest uppercase rounded-full transition-colors border border-transparent dark:border-gray-700">AGRICULTURAL TECHNOLOGY</div>
+                        <div class="absolute inset-0 bg-brand-green/10 opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none"></div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <div class="text-[9px] text-gray-400 uppercase tracking-widest mb-1 font-bold transition-colors">67040494</div>
+                        <h3 class="text-lg md:text-xl font-bold text-brand-dark dark:text-white mb-1 font-serif transition-colors group-hover:text-brand-green dark:group-hover:text-brand-green">คุณอิทธิฤทธิ์ กุนศิริ</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-light transition-colors truncate">นักวิชาการและผู้เชี่ยวชาญด้านวัสดุย่อยสลายได้</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-10 block md:hidden text-xs text-gray-400 font-light">* แตะที่รูปเพื่อดูรายละเอียดเพิ่มเติม</div>
+        </div>
+    </section>
+
+    <!-- Schedule / Flow -->
+    <section id="schedule" class="py-16 md:py-24 bg-[#FDFBF7] dark:bg-brand-dark transition-colors relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-brand-orange/5 rounded-full blur-[100px] pointer-events-none transition-colors"></div>
+
+        <div class="max-w-4xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-16 md:mb-20" data-aos="fade-up">
+                <div class="text-brand-orange text-[10px] font-bold tracking-widest uppercase mb-4">Intensive 1-Day Program</div>
+                <h2 class="text-heading text-3xl md:text-5xl text-brand-dark dark:text-white mb-6 transition-colors">Symposium Agenda</h2>
+                <div class="w-16 h-1 bg-brand-orange mx-auto rounded-full"></div>
+            </div>
+
+            <!-- Timeline Container -->
+            <div class="relative border-l-2 border-dashed border-gray-200 dark:border-gray-800 ml-4 md:ml-6 space-y-12 md:space-y-16 pb-8 transition-colors">
+                
+                <!-- Session 1 -->
+                <div class="relative pl-8 md:pl-16 group" id="session-1" data-aos="fade-up">
+                    <div class="absolute -left-[11px] md:-left-[11px] top-8 md:top-10 w-[20px] h-[20px] rounded-full bg-brand-orange border-4 border-[#FDFBF7] dark:border-brand-dark transition-all duration-300 group-hover:scale-125 shadow-[0_0_15px_rgba(249,115,22,0.4)] z-10"></div>
+                    
+                    <div class="bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-[2rem] p-6 md:p-8 shadow-sm group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300 flex flex-col md:flex-row gap-6 items-start">
+                        <div class="md:w-40 shrink-0 border-l-4 border-brand-orange pl-4">
+                            <div class="font-black text-brand-orange text-3xl md:text-4xl tracking-tight">09:00</div>
+                            <div class="text-[10px] md:text-[11px] text-gray-400 mt-1 uppercase tracking-wider font-medium">Main Auditorium</div>
+                        </div>
+                        
+                        <div class="flex-grow">
+                            <div class="inline-block bg-orange-50 dark:bg-orange-500/10 text-brand-orange text-[9px] font-bold uppercase tracking-widest mb-3 px-3 py-1 rounded-full border border-orange-100 dark:border-orange-500/20 transition-colors">OPENING KEYNOTE</div>
+                            <h4 class="text-brand-dark dark:text-white font-bold text-xl md:text-2xl mb-2 md:mb-3 font-serif transition-colors group-hover:text-brand-orange dark:group-hover:text-brand-orange">รื้อถอนเพื่อก่อสร้าง: อนาคตอัตลักษณ์งานคราฟต์</h4>
+                            <p class="text-sm md:text-[15px] text-gray-500 dark:text-gray-400 leading-relaxed font-light mb-4 transition-colors">วิเคราะห์กระบวนการส่งทอดภูมิปัญญาผ่านมุมมองของนวัตกรรมวัสดุศาสตร์</p>
+                            <div class="text-xs font-bold text-brand-dark dark:text-gray-300 transition-colors pt-4 border-t border-gray-100 dark:border-gray-800">โดย คุณวารินทร์ทิพย์ แก้วอินต๊ะ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session 2 -->
+                <div class="relative pl-8 md:pl-16 group" id="session-2" data-aos="fade-up" data-aos-delay="100">
+                    <div class="absolute -left-[11px] md:-left-[11px] top-8 md:top-10 w-[20px] h-[20px] rounded-full bg-brand-blue border-4 border-[#FDFBF7] dark:border-brand-dark transition-all duration-300 group-hover:scale-125 shadow-[0_0_15px_rgba(59,130,246,0.4)] z-10"></div>
+                    
+                    <div class="bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-[2rem] p-6 md:p-8 shadow-sm group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300 flex flex-col md:flex-row gap-6 items-start">
+                        <div class="md:w-40 shrink-0 border-l-4 border-brand-blue pl-4">
+                            <div class="font-black text-brand-blue dark:text-blue-400 text-3xl md:text-4xl tracking-tight transition-colors">10:45</div>
+                            <div class="text-[10px] md:text-[11px] text-gray-400 mt-1 uppercase tracking-wider font-medium">Main Auditorium</div>
+                        </div>
+                        
+                        <div class="flex-grow">
+                            <div class="inline-block bg-blue-50 dark:bg-blue-500/10 text-brand-blue text-[9px] font-bold uppercase tracking-widest mb-3 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-500/20 transition-colors">PANEL DISCUSSION</div>
+                            <h4 class="text-brand-dark dark:text-white font-bold text-xl md:text-2xl mb-2 md:mb-3 font-serif transition-colors group-hover:text-brand-blue dark:group-hover:text-blue-400">ความขัดแย้งของสายเลือด: การปรับตัวในยุคโลกานุวัตร</h4>
+                            <p class="text-sm md:text-[15px] text-gray-500 dark:text-gray-400 leading-relaxed font-light mb-4 transition-colors">เสวนาโต๊ะกลมว่าด้วยการรักษาสมดุลระหว่าง "ของดั้งเดิมที่แตะต้องไม่ได้" กับ "นวัตกรรมเพื่อความยั่งยืน"</p>
+                            <div class="text-xs font-bold text-brand-dark dark:text-gray-300 transition-colors pt-4 border-t border-gray-100 dark:border-gray-800">ร่วมเสวนาโดย คุณณภัทร จุฑาทิพรัตน์ & คุณอิทธิฤทธิ์ กุนศิริ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session 3 -->
+                <div class="relative pl-8 md:pl-16 group" id="session-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="absolute -left-[11px] md:-left-[11px] top-8 md:top-10 w-[20px] h-[20px] rounded-full bg-brand-green border-4 border-[#FDFBF7] dark:border-brand-dark transition-all duration-300 group-hover:scale-125 shadow-[0_0_15px_rgba(16,185,129,0.4)] z-10"></div>
+                    
+                    <div class="bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-[2rem] p-6 md:p-8 shadow-sm group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300 flex flex-col md:flex-row gap-6 items-start">
+                        <div class="md:w-40 shrink-0 border-l-4 border-brand-green pl-4">
+                            <div class="font-black text-brand-green dark:text-green-400 text-3xl md:text-4xl tracking-tight transition-colors">13:30</div>
+                            <div class="text-[10px] md:text-[11px] text-gray-400 mt-1 uppercase tracking-wider font-medium">Labs & Studios</div>
+                        </div>
+                        
+                        <div class="flex-grow">
+                            <div class="inline-block bg-green-50 dark:bg-green-500/10 text-brand-green text-[9px] font-bold uppercase tracking-widest mb-3 px-3 py-1 rounded-full border border-green-100 dark:border-green-500/20 transition-colors">HANDS-ON MASTERCLASS</div>
+                            <h4 class="text-brand-dark dark:text-white font-bold text-xl md:text-2xl mb-2 md:mb-3 font-serif transition-colors group-hover:text-brand-green dark:group-hover:text-green-400">แยกย้ายเข้าห้องปฏิบัติการ (Workshops)</h4>
+                            <p class="text-sm md:text-[15px] text-gray-500 dark:text-gray-400 leading-relaxed font-light transition-colors">ผู้เข้าร่วม Masterclass แยกย้ายเข้าคลาส Textiles, Bamboo Structure, หรือ Ceramic ตามที่ได้ลงทะเบียนไว้</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session 4 -->
+                <div class="relative pl-8 md:pl-16 group" id="session-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="absolute -left-[11px] md:-left-[11px] top-8 md:top-10 w-[20px] h-[20px] rounded-full bg-gray-400 border-4 border-[#FDFBF7] dark:border-brand-dark transition-all duration-300 group-hover:scale-125 shadow-[0_0_15px_rgba(156,163,175,0.4)] z-10"></div>
+                    
+                    <div class="bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-[2rem] p-6 md:p-8 shadow-sm group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300 flex flex-col md:flex-row gap-6 items-start">
+                        <div class="md:w-40 shrink-0 border-l-4 border-gray-400 pl-4">
+                            <div class="font-black text-brand-dark dark:text-white text-3xl md:text-4xl tracking-tight transition-colors">16:30</div>
+                            <div class="text-[10px] md:text-[11px] text-gray-400 mt-1 uppercase tracking-wider font-medium">Sala Pavilion</div>
+                        </div>
+                        
+                        <div class="flex-grow">
+                            <div class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-300 text-[9px] font-bold uppercase tracking-widest mb-3 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 transition-colors">NETWORKING</div>
+                            <h4 class="text-brand-dark dark:text-white font-bold text-xl md:text-2xl mb-2 md:mb-3 font-serif transition-colors group-hover:text-gray-600 dark:group-hover:text-gray-300">Exhibition & Networking Session</h4>
+                            <p class="text-sm md:text-[15px] text-gray-500 dark:text-gray-400 leading-relaxed font-light transition-colors">ชมผลงานจาก Masterclass พูดคุยแลกเปลี่ยนความคิดเห็น และสร้างเครือข่ายธุรกิจ พร้อมเครื่องดื่ม</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+<!-- Sponsor Marquee -->
+    <div class="w-full overflow-hidden bg-white dark:bg-[#0A0D14] py-8 md:py-10 border-t border-gray-100 dark:border-gray-900 transition-colors mt-8 md:mt-0">
+        <div class="max-w-7xl mx-auto px-4 text-center mb-6 md:mb-8">
+            <div class="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest">ผู้สนับสนุนหลักอย่างเป็นทางการ</div>
+        </div>
+        
+        <div class="w-full overflow-hidden opacity-100 dark:opacity-100 hover:opacity-100 transition-opacity duration-300">
+            <div class="sponsor-track text-lg md:text-3xl font-bold font-serif text-gray-300 dark:text-gray-700">
+                <!-- ชุดที่ 1 -->
+                <div class="flex items-center justify-around shrink-0 px-4">
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">EVENTFORU</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">DEVTOTHEMOON</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">KMITL</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">PIXELMOTION</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">BACC</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">ARCHITECTURE ART AND DESIGN</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">AGRICULTURAL TECHNOLOGY</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">SCIENCE</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                </div>
+
+                <!-- ชุดที่ 2 -->
+                <div class="flex items-center justify-around shrink-0 px-4">
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">EVENTFORU</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">DEVTOTHEMOON</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">KMITL</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">PIXELMOTION</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">BACC</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">ARCHITECTURE ART AND DESIGN</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">AGRICULTURAL TECHNOLOGY</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                    <span class="mx-4 md:mx-6 hover:text-brand-orange transition-colors cursor-pointer">SCIENCE</span> <span class="text-brand-orange text-sm md:text-lg mx-4 md:mx-6">•</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Masterclass Tracks -->
+    <section id="masterclass" class="py-16 md:py-24 bg-white dark:bg-gray-950 border-y border-gray-100 dark:border-gray-900 transition-colors">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
+                <div class="text-brand-orange text-[10px] font-bold tracking-widest uppercase mb-4">Deep-dive Learning Experience</div>
+                <h2 class="text-heading text-3xl md:text-5xl text-brand-dark dark:text-white mb-6 transition-colors">Hands-on Masterclasses</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <div class="bg-[#FDFBF7] dark:bg-[#111827] p-6 md:p-8 flex flex-col h-full rounded-3xl premium-card border border-transparent dark:border-gray-800 transition-colors" data-aos="fade-up">
+                    <div class="text-[9px] font-bold text-brand-blue tracking-widest uppercase mb-4">Track 01 | Textiles</div>
+                    <h3 class="text-xl md:text-2xl font-bold text-brand-dark dark:text-white mb-3 md:mb-4 leading-snug font-serif transition-colors">Advanced Indigo Fermentation & Biochemical Dyeing</h3>
+                    <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400 mb-6 md:mb-8 flex-grow leading-relaxed font-light transition-colors">เรียนรู้วิธีการย้อมแบบดั้งเดิมผสานความรู้ Bio-Chem เพื่อสร้างเฉดสีที่เสถียรและคงทนต่อการนำไปใช้ในอุตสาหกรรม</p>
+                    <div class="text-xs text-gray-400 font-bold border-t border-gray-200 dark:border-gray-800 pt-4 transition-colors">โดย คุณกิรณา กังวาฬวงษ์</div>
+                </div>
+
+                <div class="bg-white dark:bg-brand-dark p-6 md:p-8 flex flex-col h-full rounded-3xl premium-card border border-gray-200 dark:border-gray-700 shadow-xl relative overflow-hidden transform md:-translate-y-4 transition-colors" data-aos="fade-up" data-aos-delay="100">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-brand-orange/10 rounded-full blur-xl"></div>
+                    <div class="text-[9px] font-bold text-brand-orange tracking-widest uppercase mb-4">Track 02 | Structure</div>
+                    <h3 class="text-xl md:text-2xl font-bold text-brand-dark dark:text-white mb-3 md:mb-4 leading-snug font-serif transition-colors">Parametric Bamboo & Rattan Joinery</h3>
+                    <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400 mb-6 md:mb-8 flex-grow leading-relaxed font-light transition-colors">การออกแบบโครงสร้างด้วยไม้ไผ่และหวายผ่านโปรแกรมคอมพิวเตอร์ และลงมือสร้างโมเดลข้อต่อที่รับน้ำหนักได้จริง</p>
+                    <div class="text-xs text-brand-orange font-bold border-t border-gray-100 dark:border-gray-800 pt-4 transition-colors">โดย คุณธัญญวรรณ แช่มชื่น</div>
+                </div>
+
+                <div class="bg-[#FDFBF7] dark:bg-[#111827] p-6 md:p-8 flex flex-col h-full rounded-3xl premium-card border border-transparent dark:border-gray-800 transition-colors" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-[9px] font-bold text-brand-green tracking-widest uppercase mb-4 transition-colors">Track 03 | Ceramic</div>
+                    <h3 class="text-xl md:text-2xl font-bold text-brand-dark dark:text-white mb-3 md:mb-4 leading-snug font-serif transition-colors">Modern Celadon Glaze Formulation</h3>
+                    <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400 mb-6 md:mb-8 flex-grow leading-relaxed font-light transition-colors">เข้าใจสูตรการปรับค่าขี้เถ้าและแร่ธาตุ เพื่อสร้างเอฟเฟกต์การแตกลายงาที่มีเอกลักษณ์และปลอดภัยต่อการบริโภค</p>
+                    <div class="text-xs text-gray-400 font-bold border-t border-gray-200 dark:border-gray-800 pt-4 transition-colors">โดย คุณศุภาวิตา พิรักษา</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Form & Pricing Cards -->
+    <section id="register" class="py-16 md:py-24 bg-[#FDFBF7] dark:bg-[#0A0D14] transition-colors relative">
+        <div class="max-w-5xl mx-auto px-4 relative z-10">
+            
+            <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
+                <div class="inline-block bg-orange-100 dark:bg-orange-500/10 text-brand-orange text-[10px] font-bold tracking-widest uppercase mb-4 px-3 py-1 rounded-full border border-orange-200 dark:border-orange-500/20 transition-colors">Participation Passes</div>
+                <h2 class="text-heading text-3xl md:text-5xl text-brand-dark dark:text-white mb-6 transition-colors">แบบฟอร์มลงทะเบียนออนไลน์</h2>
+                <div class="w-16 h-1 bg-brand-orange mx-auto rounded-full"></div>
+            </div>
+
+            <!-- Pricing Cards (ระบบเปิดปิดออโต้ + Animations) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16 max-w-6xl mx-auto" data-aos="fade-up" data-aos-delay="50">
+                
+                <!-- Card 1: Early Bird Ticket -->
+                <label class="cursor-pointer relative group block mt-4 md:mt-0" id="labelEarly">
+                    <input type="radio" name="ticket" id="radioEarly" value="Early Bird Ticket" data-price="1500" class="ticket-radio peer sr-only" checked onchange="calculatePrice()">
+                    <div class="bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 p-6 md:p-10 rounded-[2rem] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] dark:shadow-none flex flex-col premium-card transition-all h-full relative">
+                        <!-- Top Badge (เพิ่ม badge-float) -->
+                        <div class="badge-float absolute -top-4 left-1/2 bg-brand-orange text-white text-[9px] md:text-[10px] font-black px-4 md:px-6 py-2 rounded-full whitespace-nowrap tracking-widest uppercase shadow-lg shadow-orange-500/30 border border-orange-400">
+                            🔥 BEST VALUE
+                        </div>
+                        
+                        <div class="flex justify-between items-start mb-4 mt-2">
+                            <h3 class="text-2xl md:text-3xl font-bold text-brand-dark dark:text-white font-serif transition-colors">Early Bird</h3>
+                            <div class="w-6 h-6 rounded-full bg-brand-orange text-white hidden peer-checked:flex items-center justify-center shadow-lg shadow-orange-500/40">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                        </div>
+                        <div class="text-4xl md:text-5xl font-black text-brand-orange mb-6 md:mb-8 flex items-baseline gap-2">
+                            1,500 <span class="text-base md:text-lg font-medium text-gray-400">บาท</span>
+                        </div>
+                        
+                        <ul class="text-sm md:text-[15px] text-gray-600 dark:text-gray-400 space-y-4 mb-8 md:mb-10 flex-grow font-light transition-colors">
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span>เข้าฟังบรรยาย Keynote และ Panel (เช้า)</span>
+                            </li>
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span>เข้าร่วม Workshop ลงมือปฏิบัติจริง (บ่าย)</span>
+                            </li>
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span>อาหารกลางวัน อาหารว่าง และเครื่องดื่ม</span>
+                            </li>
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span>รับ E-Certificate หลังจบงาน</span>
+                            </li>
+                        </ul>
+                        
+                        <div id="badgeEarly" class="bg-[#FFF8F3] dark:bg-brand-orange/10 text-brand-orange text-[10px] md:text-xs font-bold uppercase tracking-wider py-3 md:py-4 rounded-full text-center w-full transition-all border border-orange-200 dark:border-orange-500/20 group-hover:bg-brand-orange group-hover:text-white">
+                            จองราคาพิเศษ
+                        </div>
+                    </div>
+                </label>
+
+                <!-- Card 2: Regular Ticket -->
+                <label class="cursor-pointer relative group block mt-4 md:mt-0" id="labelRegular">
+                    <input type="radio" name="ticket" id="radioRegular" value="Regular Ticket" data-price="2500" class="ticket-radio peer sr-only" onchange="calculatePrice()">
+                    <div class="bg-[#0B1120] text-white p-6 md:p-10 rounded-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] relative flex flex-col h-full border border-gray-800 transition-all premium-card">
+                        <!-- Top Badge (เพิ่ม badge-float) -->
+                        <div class="badge-float absolute -top-4 left-1/2 bg-gray-700 text-gray-100 text-[9px] md:text-[10px] font-black px-4 md:px-6 py-2 rounded-full whitespace-nowrap tracking-widest uppercase shadow-lg shadow-gray-900 border border-gray-500">
+                            STANDARD PASS
+                        </div>
+                        
+                        <div class="flex justify-between items-start mb-4 mt-2">
+                            <h3 class="text-2xl md:text-3xl font-bold text-white font-serif">Regular</h3>
+                            <div class="w-6 h-6 rounded-full bg-brand-orange text-white hidden peer-checked:flex items-center justify-center shadow-lg shadow-orange-500/40">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                        </div>
+                        <div class="text-4xl md:text-5xl font-black text-white mb-6 md:mb-8 flex items-baseline gap-2">
+                            2,500 <span class="text-base md:text-lg font-medium text-gray-400">บาท</span>
+                        </div>
+                        
+                        <ul class="text-sm md:text-[15px] text-gray-300 space-y-4 mb-8 md:mb-10 flex-grow font-light transition-colors">
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span>เข้าฟังบรรยาย Keynote และ Panel (เช้า)</span>
+                            </li>
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span>เข้าร่วม Workshop ลงมือปฏิบัติจริง (บ่าย)</span>
+                            </li>
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span>อาหารกลางวัน อาหารว่าง และเครื่องดื่ม</span>
+                            </li>
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span>รับ E-Certificate หลังจบงาน</span>
+                            </li>
+                        </ul>
+                        
+                        <div id="badgeRegular" class="bg-gray-800 text-gray-300 hover:bg-brand-orange hover:text-white text-[10px] md:text-xs font-bold uppercase tracking-wider py-3 md:py-4 rounded-full text-center w-full transition-colors cursor-pointer border border-gray-700 hover:border-brand-orange">
+                            เลือกบัตร Regular
+                        </div>
+                    </div>
+                </label>
+
+                <!-- Card 3: VIP Pass -->
+                <!-- Card 3: VIP Pass -->
+                <label class="cursor-pointer relative group block mt-4 md:mt-0" id="labelVIP">
+                    <input type="radio" name="ticket" id="radioVIP" value="VIP Ticket" data-price="3500" class="ticket-radio peer sr-only" onchange="calculatePrice()">
+                    <!-- เอา overflow-hidden ออกจากบรรทัดนี้ -->
+                    <div class="bg-gray-900 dark:bg-black border border-brand-orange/40 p-6 md:p-10 rounded-[2rem] shadow-[0_10px_40px_-10px_rgba(249,115,22,0.15)] flex flex-col premium-card transition-all h-full relative">
+                        
+                        <!-- VIP Shimmer Effect (สร้างกล่องแยกมาครอบเพื่อเก็บแสงไม่ให้ล้นขอบ) -->
+                        <div class="absolute inset-0 rounded-[2rem] overflow-hidden pointer-events-none">
+                            <div class="vip-shimmer"></div>
+                        </div>
+
+                        <!-- Top Badge (ปรับ z-20 ให้อยู่บนสุด) -->
+                        <div class="badge-float absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-[9px] md:text-[10px] font-black px-4 md:px-6 py-2 rounded-full whitespace-nowrap tracking-widest uppercase shadow-lg shadow-orange-500/40 border border-orange-400 z-20">
+                            👑 VIP EXPERIENCE
+                        </div>
+                        
+                        <div class="flex justify-between items-start mb-4 mt-2 relative z-10">
+                            <h3 class="text-2xl md:text-3xl font-bold text-white font-serif transition-colors">VIP Pass</h3>
+                            <div class="w-6 h-6 rounded-full bg-brand-orange text-white hidden peer-checked:flex items-center justify-center shadow-lg shadow-orange-500/40">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                        </div>
+                        <div class="text-4xl md:text-5xl font-black text-brand-orange mb-6 md:mb-8 flex items-baseline gap-2 relative z-10">
+                            3,500 <span class="text-base md:text-lg font-medium text-gray-400">บาท</span>
+                        </div>
+                        
+                        <ul class="text-sm md:text-[15px] text-gray-300 space-y-4 mb-8 md:mb-10 flex-grow font-light transition-colors relative z-10">
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-brand-orange shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span>สิทธิพิเศษทุกประการของบัตร Regular</span>
+                            </li>
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span class="text-amber-100 font-medium">ที่นั่ง Reserved Seat แถวหน้าสุด (VIP)</span>
+                            </li>
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span class="text-amber-100 font-medium">เข้าร่วม Exclusive Dinner กับวิทยากร</span>
+                            </li>
+                            <li class="flex gap-3 md:gap-4 items-start">
+                                <svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                <span class="text-amber-100 font-medium">รับชุดของที่ระลึก Limited Craft Kit</span>
+                            </li>
+                        </ul>
+                        
+                        <div id="badgeVIP" class="bg-gradient-to-r from-orange-500/20 to-amber-500/20 text-brand-orange text-[10px] md:text-xs font-bold uppercase tracking-wider py-3 md:py-4 rounded-full text-center w-full transition-all border border-brand-orange/30 group-hover:from-brand-orange group-hover:to-amber-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-orange-500/30 relative z-10">
+                            เลือกระดับ VIP
+                        </div>
+                    </div>
+                </label>
+            </div>
+            
+
+            <!-- Form Container -->
+            <div class="bg-white dark:bg-[#111827] border border-gray-100 dark:border-gray-800 p-6 md:p-14 shadow-2xl relative rounded-[2rem] md:rounded-[2.5rem] transition-colors premium-card" data-aos="fade-up" data-aos-delay="100">
+                <form id="registerForm" class="space-y-10 md:space-y-12">
+                    
+                    <!-- 1. ข้อมูลส่วนบุคคล -->
+                    <div>
+                        <h3 class="text-lg md:text-xl font-bold text-brand-dark dark:text-white mb-6 md:mb-8 flex items-center gap-3 md:gap-4 border-b border-gray-100 dark:border-gray-800 pb-4 font-serif transition-colors">
+                            <span class="flex items-center justify-center w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-orange text-white text-xs md:text-sm font-bold font-sans">1</span>
+                            ข้อมูลส่วนตัว
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <div class="bg-gray-50 dark:bg-[#0A0D14] p-2 rounded-2xl border border-transparent hover:border-gray-200 dark:hover:border-gray-700 focus-within:border-brand-orange dark:focus-within:border-brand-orange focus-within:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all">
+                                <label class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest px-3 pt-1">ชื่อ-นามสกุล (ภาษาไทย) *</label>
+                                <input type="text" name="name" id="inputName" placeholder="เช่น สมชาย ใจดี" required class="w-full bg-transparent text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none placeholder-gray-300 dark:placeholder-gray-700">
+                            </div>
+                            <div class="bg-gray-50 dark:bg-[#0A0D14] p-2 rounded-2xl border border-transparent hover:border-gray-200 dark:hover:border-gray-700 focus-within:border-brand-orange dark:focus-within:border-brand-orange focus-within:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all">
+                                <label class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest px-3 pt-1">Full Name (English) *</label>
+                                <input type="text" placeholder="e.g. Somchai Jaidee" class="w-full bg-transparent text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none placeholder-gray-300 dark:placeholder-gray-700">
+                            </div>
+                            <div class="bg-gray-50 dark:bg-[#0A0D14] p-2 rounded-2xl border border-transparent hover:border-gray-200 dark:hover:border-gray-700 focus-within:border-brand-orange dark:focus-within:border-brand-orange focus-within:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all">
+                                <label class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest px-3 pt-1">อีเมล (รับ E-Ticket) *</label>
+                                <input type="email" name="email" placeholder="example@mail.com" required class="w-full bg-transparent text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none placeholder-gray-300 dark:placeholder-gray-700">
+                            </div>
+                            <div class="bg-gray-50 dark:bg-[#0A0D14] p-2 rounded-2xl border border-transparent hover:border-gray-200 dark:hover:border-gray-700 focus-within:border-brand-orange dark:focus-within:border-brand-orange focus-within:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all">
+                                <label class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest px-3 pt-1">เบอร์โทรศัพท์มือถือ *</label>
+                                <input type="tel" name="phone" placeholder="089-123-4567" required class="w-full bg-transparent text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none placeholder-gray-300 dark:placeholder-gray-700">
+                            </div>
+                        </div>
+
+                        <!-- 2. ข้อมูลองค์กร (อัปเดตเป็น Dropdown) -->
+                        <h3 class="text-lg md:text-xl font-bold text-brand-dark dark:text-white mb-6 md:mb-8 mt-8 md:mt-10 flex items-center gap-3 md:gap-4 border-b border-gray-100 dark:border-gray-800 pb-4 font-serif transition-colors">
+                            <span class="flex items-center justify-center w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-blue text-white text-xs md:text-sm font-bold font-sans">2</span>
+                            ข้อมูลองค์กร
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            
+                            <!-- Dropdown ตำแหน่ง/อาชีพ -->
+                            <div class="bg-gray-50 dark:bg-[#0A0D14] p-2 rounded-2xl border border-transparent hover:border-gray-200 dark:hover:border-gray-700 focus-within:border-brand-blue dark:focus-within:border-brand-blue focus-within:shadow-[0_0_15px_rgba(59,130,246,0.15)] transition-all relative">
+                                <label class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest px-3 pt-1">ตำแหน่ง / อาชีพ *</label>
+                                <select id="roleSelect" class="w-full bg-transparent text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none appearance-none cursor-pointer" onchange="toggleOtherInput('roleSelect', 'roleOther', 'roleHidden')">
+                                    <option value="" disabled selected>-- เลือกตำแหน่ง/อาชีพ --</option>
+                                    <option value="ช่างฝีมือ">ช่างฝีมือ (Artisan)</option>
+                                    <option value="นักวิจัย">นักวิจัย (Researcher)</option>
+                                    <option value="ผู้ประกอบการ">ผู้ประกอบการ (Entrepreneur)</option>
+                                    <option value="นักศึกษา">นักศึกษา (Student)</option>
+                                    <option value="other">อื่นๆ (โปรดระบุ)</option>
+                                </select>
+                                <div class="pointer-events-none absolute top-8 right-4 flex items-center text-gray-400">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                                <input type="text" id="roleOther" placeholder="โปรดระบุตำแหน่ง/อาชีพ" class="w-full bg-transparent text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none placeholder-gray-300 dark:placeholder-gray-700 hidden border-t border-gray-200 dark:border-gray-700 mt-2 pt-2 transition-all" oninput="updateHiddenValue('roleOther', 'roleHidden')">
+                                <input type="hidden" name="role" id="roleHidden" value="" required>
+                            </div>
+
+                            <!-- Dropdown องค์กร/สตูดิโอ -->
+                            <div class="bg-gray-50 dark:bg-[#0A0D14] p-2 rounded-2xl border border-transparent hover:border-gray-200 dark:hover:border-gray-700 focus-within:border-brand-blue dark:focus-within:border-brand-blue focus-within:shadow-[0_0_15px_rgba(59,130,246,0.15)] transition-all relative">
+                                <label class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest px-3 pt-1">องค์กร / สตูดิโอ *</label>
+                                <select id="companySelect" class="w-full bg-transparent text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none appearance-none cursor-pointer" onchange="toggleOtherInput('companySelect', 'companyOther', 'companyHidden')">
+                                    <option value="" disabled selected>-- เลือกองค์กร/หน่วยงาน --</option>
+                                    <option value="สถาบันการศึกษา">สถาบันการศึกษา (Educational Institution)</option>
+                                    <option value="หน่วยงานภาครัฐ">หน่วยงานภาครัฐ (Government Agency)</option>
+                                    <option value="องค์กรธุรกิจ">องค์กรธุรกิจทั่วไป (Corporate)</option>
+                                    <option value="ธุรกิจส่วนตัว / ฟรีแลนซ์">ธุรกิจส่วนตัว / ฟรีแลนซ์ (Freelance)</option>
+                                    <option value="other">อื่นๆ (โปรดระบุ)</option>
+                                </select>
+                                <div class="pointer-events-none absolute top-8 right-4 flex items-center text-gray-400">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                                <input type="text" id="companyOther" placeholder="โปรดระบุชื่อองค์กร" class="w-full bg-transparent text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none placeholder-gray-300 dark:placeholder-gray-700 hidden border-t border-gray-200 dark:border-gray-700 mt-2 pt-2 transition-all" oninput="updateHiddenValue('companyOther', 'companyHidden')">
+                                <input type="hidden" name="company" id="companyHidden" value="" required>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 3. เลือก Workshop -->
+                    <div>
+                        <h3 class="text-lg md:text-xl font-bold text-brand-dark dark:text-white mb-6 md:mb-8 flex items-center gap-3 md:gap-4 border-b border-gray-100 dark:border-gray-800 pb-4 font-serif transition-colors">
+                            <span class="flex items-center justify-center w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-green text-white text-xs md:text-sm font-bold font-sans">3</span>
+                            เลือก Workshop
+                        </h3>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-widest transition-colors">เลือกคลาสที่คุณต้องการเข้าร่วม (เฉพาะผู้ซื้อบัตรที่มีสิทธิ์) *</label>
+                            <div class="relative bg-gray-50 dark:bg-[#0A0D14] p-2 rounded-2xl border border-transparent hover:border-gray-200 dark:hover:border-gray-700 focus-within:border-brand-green focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all">
+                                <select id="workshopSelect" name="workshop" onchange="document.getElementById('hiddenWorkshop').value = this.value" class="w-full bg-transparent px-3 py-2 text-sm focus:outline-none text-gray-800 dark:text-white appearance-none cursor-pointer">
+                                    <option value="ไม่ได้เลือก" class="text-gray-900">-- ไม่เข้าร่วม Workshop (ฟังบรรยายอย่างเดียว) --</option>
+                                    <option value="Track 1: Advanced Indigo" class="text-gray-900">Track 01: Advanced Indigo Fermentation (ย้อมคราม)</option>
+                                    <option value="Track 2: Bamboo Joinery" class="text-gray-900">Track 02: Parametric Bamboo & Rattan Joinery (โครงสร้างไม้ไผ่)</option>
+                                    <option value="Track 3: Celadon Glaze" class="text-gray-900">Track 03: Modern Celadon Glaze Formulation (เซรามิก)</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-5 flex items-center text-gray-400">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary & Submit -->
+                    <div class="bg-orange-50 dark:bg-[#1A2530] border-2 border-orange-200 dark:border-gray-800 p-6 md:p-10 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 mt-10 md:mt-12 rounded-3xl transition-colors relative overflow-hidden">
+                        <div class="absolute left-0 top-0 w-2 h-full bg-brand-orange shadow-[0_0_15px_#F97316]"></div>
+                        
+                        <div class="text-center md:text-left w-full md:w-auto flex-grow">
+                            <div class="text-xs text-brand-orange font-bold uppercase tracking-widest mb-3" id="summaryText">Early Bird Ticket (1 ท่าน)</div>
+                            
+                            <div class="space-y-1.5 mb-4 max-w-[240px] mx-auto md:mx-0 text-sm text-gray-600 dark:text-gray-400">
+                                <div class="flex justify-between">
+                                    <span>ราคาบัตร (Subtotal)</span>
+                                    <span id="summarySubtotal" class="font-medium text-brand-dark dark:text-white">1,500 ฿</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>ภาษีมูลค่าเพิ่ม (VAT 7%)</span>
+                                    <span id="summaryVat" class="font-medium text-brand-dark dark:text-white">105 ฿</span>
+                                </div>
+                            </div>
+
+                            <div class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1 font-bold transition-colors border-t border-gray-200 dark:border-gray-700 pt-3 max-w-[240px] mx-auto md:mx-0">ยอดชำระสุทธิ (NET)</div>
+                            <div class="text-4xl md:text-5xl font-heading font-bold text-brand-dark dark:text-white mb-2 transition-colors" id="summaryTotal">1,605 <span class="text-sm md:text-lg font-sans font-medium text-gray-400">บาท</span></div>
+                        </div>
+                        
+                        <div class="w-full md:w-auto shrink-0">
+                            <!-- Hidden inputs REQUIRED by the backend script -->
+                            <input type="hidden" name="pax" id="hiddenPax" value="1"> 
+                            <input type="hidden" name="total" id="hiddenTotal" value="1605">
+                            <input type="hidden" name="payment" value="โอนเงิน/บัตรเครดิต">
+                            <input type="hidden" name="workshop" id="hiddenWorkshop" value="ไม่ได้เลือก">
+
+                            <button type="submit" id="submitBtn" class="magnetic-btn w-full md:w-auto bg-brand-dark dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-brand-dark py-4 md:py-5 px-8 md:px-10 text-[11px] font-bold tracking-widest uppercase transition-all rounded-full shadow-2xl flex items-center justify-center gap-3">
+                                ยืนยันการลงทะเบียน
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive FAQ Section (เพิ่มคำถาม) -->
+    <section class="py-16 md:py-24 bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-900 transition-colors">
+        <div class="max-w-3xl mx-auto px-4">
+            <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
+                <div class="inline-block bg-orange-100 dark:bg-orange-500/10 text-brand-orange text-[10px] font-bold tracking-widest uppercase mb-3 px-3 py-1 rounded-full border border-orange-200 dark:border-orange-500/20">Got Questions?</div>
+                <h2 class="text-heading text-2xl md:text-4xl text-brand-dark dark:text-white">คำถามที่พบบ่อย (FAQ)</h2>
+            </div>
+
+            <div class="space-y-3 md:space-y-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="faq-item bg-[#FDFBF7] dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-2xl p-5 md:p-6 cursor-pointer hover:border-brand-orange dark:hover:border-brand-orange transition-colors" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center font-bold text-brand-dark dark:text-white text-sm md:text-base">
+                        <span class="font-medium">งานสัมมนานี้เหมาะกับใครบ้าง?</span>
+                        <svg class="w-5 h-5 text-gray-400 faq-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer text-xs md:text-sm text-gray-500 dark:text-gray-400 font-light">
+                        <div class="pt-3">งานนี้เหมาะสำหรับนักออกแบบสร้างสรรค์, ช่างฝีมือพื้นบ้าน, นักวิจัยวัสดุศาสตร์, และผู้ประกอบการธุรกิจที่ต้องการต่อยอดงานคราฟต์ไทยสู่ตลาดระดับสากล ผ่านมุมมองใหม่และนวัตกรรม</div>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-[#FDFBF7] dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-2xl p-5 md:p-6 cursor-pointer hover:border-brand-orange dark:hover:border-brand-orange transition-colors" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center font-bold text-brand-dark dark:text-white text-sm md:text-base">
+                        <span class="font-medium">ถ้าต้องการเรียน Masterclass ต้องเตรียมอะไรมาบ้าง?</span>
+                        <svg class="w-5 h-5 text-gray-400 faq-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer text-xs md:text-sm text-gray-500 dark:text-gray-400 font-light">
+                        <div class="pt-3">ทางผู้จัดเตรียมวัสดุและอุปกรณ์พื้นฐานให้ครบถ้วน ยกเว้นคลาส 'Bamboo Joinery' ที่ผู้เข้าร่วมจำเป็นต้องนำ Laptop ส่วนตัวที่มีโปรแกรม Rhino มาเองเพื่อปฏิบัติจริง</div>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-[#FDFBF7] dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-2xl p-5 md:p-6 cursor-pointer hover:border-brand-orange dark:hover:border-brand-orange transition-colors" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center font-bold text-brand-dark dark:text-white text-sm md:text-base">
+                        <span class="font-medium">เดินทางมายังสถานที่จัดงานได้อย่างไร?</span>
+                        <svg class="w-5 h-5 text-gray-400 faq-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer text-xs md:text-sm text-gray-500 dark:text-gray-400 font-light">
+                        <div class="pt-3">สถานที่จัดงานคือ หอศิลปวัฒนธรรมแห่งกรุงเทพมหานคร (BACC) แนะนำให้เดินทางด้วยรถไฟฟ้า BTS ลงสถานีสนามกีฬาแห่งชาติ (ทางออก 3) มีทางเชื่อมเดินเข้าอาคารได้โดยตรง</div>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-[#FDFBF7] dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-2xl p-5 md:p-6 cursor-pointer hover:border-brand-orange dark:hover:border-brand-orange transition-colors" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center font-bold text-brand-dark dark:text-white text-sm md:text-base">
+                        <span class="font-medium">มีที่จอดรถรองรับหรือไม่?</span>
+                        <svg class="w-5 h-5 text-gray-400 faq-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer text-xs md:text-sm text-gray-500 dark:text-gray-400 font-light">
+                        <div class="pt-3">มีลานจอดรถชั้นใต้ดินของหอศิลป์ BACC (มีค่าบริการตามอัตราของสถานที่) หรือสามารถจอดรถได้ที่ห้างสรรพสินค้า MBK Center และ Siam Discovery ซึ่งอยู่บริเวณใกล้เคียง</div>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-[#FDFBF7] dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-2xl p-5 md:p-6 cursor-pointer hover:border-brand-orange dark:hover:border-brand-orange transition-colors" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center font-bold text-brand-dark dark:text-white text-sm md:text-base">
+                        <span class="font-medium">สามารถโอนสิทธิ์บัตรให้ผู้อื่นได้หรือไม่?</span>
+                        <svg class="w-5 h-5 text-gray-400 faq-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer text-xs md:text-sm text-gray-500 dark:text-gray-400 font-light">
+                        <div class="pt-3">สามารถโอนสิทธิ์ให้ผู้อื่นได้ แต่ต้องแจ้งชื่อและข้อมูลผู้เข้าร่วมใหม่ให้ทางทีมงานทราบล่วงหน้าอย่างน้อย 3 วันก่อนวันจัดงาน ผ่านทาง LINE Official: @ThaiCraftSymposium</div>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-[#FDFBF7] dark:bg-[#111827] border border-gray-100 dark:border-gray-800 rounded-2xl p-5 md:p-6 cursor-pointer hover:border-brand-orange dark:hover:border-brand-orange transition-colors" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center font-bold text-brand-dark dark:text-white text-sm md:text-base">
+                        <span class="font-medium">ช่องทางการชำระเงินมีอะไรบ้าง?</span>
+                        <svg class="w-5 h-5 text-gray-400 faq-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer text-xs md:text-sm text-gray-500 dark:text-gray-400 font-light">
+                        <div class="pt-3">รองรับการโอนเงินผ่าน Mobile Banking ทุกธนาคาร (พร้อมเพย์) และการชำระเงินผ่านบัตรเครดิต/เดบิต (Visa, Mastercard, JCB)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Venue Section -->
+    <section id="venue" class="py-16 md:py-24 bg-[#FDFBF7] dark:bg-[#0A0D14] border-t border-gray-100 dark:border-gray-900 transition-colors">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+                <div data-aos="fade-right">
+                    <div class="inline-block bg-orange-100 dark:bg-orange-500/10 text-brand-orange text-[10px] font-bold tracking-widest uppercase mb-4 px-3 py-1 rounded-full border border-orange-200 dark:border-orange-500/20">Venue & Accommodations</div>
+                    <h2 class="text-heading text-3xl md:text-5xl text-brand-dark dark:text-white mb-6 md:mb-8">Sala Pavilion & BACC Bangkok</h2>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-8 md:mb-10 leading-relaxed font-light px-2 md:px-0">
+                        สถานที่จัดงานหลักอยู่ที่ หอศิลปวัฒนธรรมแห่งกรุงเทพมหานคร (BACC) ในส่วนการบรรยายหลัก และส่วนของเวิร์กชอปจะจัดขึ้นที่ศาลาอเนกประสงค์สถาปัตยกรรมไม้ไผ่ "Sala Pavilion" หน้าลาน BACC
+                    </p>
+                </div>
+                <div class="relative premium-card mx-4 md:mx-0" data-aos="fade-left">
+                    <img src="https://themomentum.co/wp-content/uploads/2018/05/TheMO-BACC_cover.jpg" class="w-full h-auto rounded-3xl shadow-xl border-4 border-white dark:border-gray-800 transition-colors" alt="BACC Bangkok">
+                    <div class="absolute -bottom-6 left-4 md:left-6 right-4 md:right-auto bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-5 md:p-6 shadow-2xl rounded-2xl transition-colors backdrop-blur-md">
+                        <div class="font-bold text-brand-dark dark:text-white text-sm mb-1 font-serif">BACC & Sala Pavilion</div>
+                        <div class="text-[9px] md:text-[10px] text-gray-500 dark:text-gray-400 font-medium">939 ถนนพระรามที่ 1 ปทุมวัน กรุงเทพฯ</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark dark:bg-black pt-16 md:pt-20 pb-12 text-white transition-colors border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+            <div class="flex flex-col items-center md:items-start gap-4 text-center md:text-left">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-6 bg-brand-orange rounded-full shadow-[0_0_8px_#F97316]"></div>
+                    <span class="text-heading font-bold text-xl md:text-2xl tracking-wide text-white">THAI CRAFT</span>
+                </div>
+                <p class="text-[10px] md:text-[11px] text-gray-400 tracking-wide font-light leading-relaxed max-w-sm">© 2025 Thai Craft Symposium.<br>In collaboration with the Dept. of Vernacular Arts.</p>
+            </div>
+            
+            <div class="flex flex-col items-center md:items-start gap-2 text-center md:text-left">
+                <h4 class="text-brand-orange text-[10px] font-bold tracking-widest uppercase mb-2">Venue</h4>
+                <p class="text-xs md:text-sm text-gray-300 font-medium">หอศิลปวัฒนธรรมแห่งกรุงเทพมหานคร (BACC)</p>
+                <p class="text-[10px] md:text-[11px] text-gray-500 font-light leading-relaxed mt-1">939 ถนนพระรามที่ 1 แขวงวังใหม่<br>เขตปทุมวัน กรุงเทพมหานคร 10330<br>สถานีรถไฟฟ้า BTS สนามกีฬาแห่งชาติ (ทางออก 3)</p>
+            </div>
+            
+            <div class="flex flex-col items-center md:items-end gap-2 text-center sm:col-span-2 md:col-span-1 md:text-right">
+                <h4 class="text-brand-orange text-[10px] font-bold tracking-widest uppercase mb-2">Contact</h4>
+                <p class="text-xs md:text-sm text-gray-300 font-medium">info@EventForU.com</p>
+                <p class="text-[10px] md:text-[11px] text-gray-500 font-light mt-1">โทร:097-265-3945<br>LINE Official: @EventForU<br>จันทร์ - ศุกร์ (09:00 - 18:00 น.)</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal วิทยากร (Speaker Modal) -->
+    <div id="speakerModal" class="fixed inset-0 z-[110] bg-black/80 backdrop-blur-md flex items-center justify-center hidden opacity-0 transition-opacity duration-300 p-4">
+        <div class="bg-white dark:bg-[#111827] max-w-2xl w-full rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row transform scale-95 transition-transform duration-300 border border-gray-100 dark:border-gray-800" id="speakerModalContent">
+            
+            <div class="h-48 md:h-auto md:w-2/5 relative p-3">
+                <div class="w-full h-full relative overflow-hidden rounded-[1.5rem] bg-gray-100 dark:bg-gray-800">
+                    <img id="modalSpeakerImg" src="" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-black/80"></div>
+                    <div id="modalSpeakerTag" class="absolute bottom-4 left-4 bg-brand-orange text-white text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">TAG</div>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 md:w-3/5 relative flex flex-col">
+                <button onclick="closeSpeakerModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 dark:hover:text-white transition bg-gray-100 dark:bg-gray-800 rounded-full p-1 z-10">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                
+                <div id="modalSpeakerRole" class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 md:mb-2 mt-2">ROLE</div>
+                <h3 id="modalSpeakerName" class="text-xl md:text-2xl font-bold text-brand-dark dark:text-white mb-3 md:mb-4 font-serif">Speaker Name</h3>
+                
+                <div class="overflow-y-auto max-h-32 md:max-h-48 pr-2 text-xs md:text-sm text-gray-600 dark:text-gray-400 font-light leading-relaxed mb-4 md:mb-6" id="speakerDetailContent">
+                    รายละเอียดวิทยากร...
+                </div>
+                
+                <div class="mt-auto">
+                    <a href="#schedule" onclick="closeSpeakerModal()" class="inline-flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-brand-orange uppercase tracking-widest hover:text-orange-600 transition">
+                        ดูกำหนดการ <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket Modal (QR Code) - ลบปุ่ม Save ออก -->
+    <div id="ticketModal" class="fixed inset-0 z-[120] flex items-center justify-center bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 p-4">
+        <div class="flex flex-col items-center max-w-sm w-full">
+            <div id="ticketContainer" class="bg-[#FDFBF7] w-full shadow-2xl relative p-8 md:p-10 text-center rounded-[2rem] overflow-hidden border border-gray-200">
+                <div class="absolute top-0 left-0 w-full h-2 bg-brand-orange"></div>
+                <h2 class="text-heading text-2xl md:text-3xl font-bold text-brand-dark mb-1 md:mb-2 mt-2">EventForU</h2>
+                <div class="text-brand-orange text-[9px] font-bold tracking-widest uppercase mb-6 md:mb-8 pb-3 md:pb-4 border-b border-gray-200">2025 Official E-Ticket</div>
+                
+                <div class="bg-white p-3 md:p-4 inline-block mb-6 md:mb-8 border border-gray-200 shadow-sm rounded-2xl" id="qrcodeWrapper">
+                    <div id="qrcode"></div>
+                </div>
+                
+                <div class="text-left bg-white p-5 md:p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="text-gray-400 text-[9px] font-bold uppercase tracking-widest mb-1">Attendee</div>
+                    <div id="ticketName" class="text-lg md:text-xl font-bold text-brand-dark mb-3 md:mb-4 font-serif border-b border-gray-100 pb-2 md:pb-3">John Doe</div>
+                    <div class="text-gray-400 text-[9px] font-bold uppercase tracking-widest mb-1">Ticket Type</div>
+                    <div id="ticketTier" class="text-xs md:text-sm font-bold text-brand-orange uppercase tracking-widest">Early Bird Ticket</div>
+                </div>
+            </div>
+            
+            <div class="flex gap-3 md:gap-4 mt-6 md:mt-8 w-full">
+                <button type="button" onclick="closeTicket()" class="w-full bg-brand-dark hover:bg-gray-800 text-white text-[11px] font-bold py-3.5 uppercase tracking-widest transition rounded-full shadow-xl">ปิดหน้าต่าง / Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        AOS.init({ once: true, offset: 50, duration: 800, easing: 'ease-out-cubic' });
+
+        // URL Google Apps Script
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFnp09VDXGq1sQuV9YYFbi5-vxYe_Lp3EASi85FLDlgYIkgo72H3Z2iltPICm9RviaUQ/exec'; 
+
+        // ระบบ Dropdown สำหรับช่อง อาชีพ / องค์กร ให้มี "อื่นๆ"
+        function toggleOtherInput(selectId, otherId, hiddenId) {
+            const select = document.getElementById(selectId);
+            const otherInput = document.getElementById(otherId);
+            const hiddenInput = document.getElementById(hiddenId);
+
+            if (select.value === 'other') {
+                otherInput.classList.remove('hidden');
+                otherInput.required = true;
+                hiddenInput.value = otherInput.value;
+                otherInput.focus();
+            } else {
+                otherInput.classList.add('hidden');
+                otherInput.required = false;
+                hiddenInput.value = select.value;
+            }
+        }
+
+        function updateHiddenValue(otherId, hiddenId) {
+            document.getElementById(hiddenId).value = document.getElementById(otherId).value;
+        }
+
+        // ระบบจัดการเวลาซื้อบัตร (อัปเดต: เปิด Regular ให้จองได้ตลอดเวลา)
+        function checkTicketAvailability() {
+            // ตั้งเวลาปิดขาย Early Bird (9 ต.ค. 2026) 
+            const regularOpenDate = new Date('2026-10-09T00:00:00+07:00').getTime(); 
+            const now = new Date().getTime();
+            
+            const radioEarly = document.getElementById('radioEarly');
+            const labelEarly = document.getElementById('labelEarly');
+            const badgeEarly = document.getElementById('badgeEarly');
+            
+            // เปิด Regular ให้ใช้งานได้เสมอ
+            const radioRegular = document.getElementById('radioRegular');
+            
+            if (now >= regularOpenDate) {
+                // ปิด Early Bird เมื่อถึงวันที่ 9 ต.ค.
+                if(radioEarly) {
+                    radioEarly.disabled = true;
+                    radioEarly.checked = false;
+                    labelEarly.className = "cursor-not-allowed opacity-60 grayscale-[30%] relative group block";
+                    badgeEarly.innerHTML = "❌ หมดเขตจำหน่าย";
+                    badgeEarly.className = "bg-red-500/20 text-red-400 text-[10px] md:text-xs font-bold tracking-wider py-3 md:py-4 rounded-full text-center w-full border border-red-500/30 transition-colors";
+                }
+                
+                // ตรวจสอบว่ามีบัตรไหนถูกเลือกอยู่ไหม ถ้าไม่มีให้เด้งไปเลือก Regular อัตโนมัติ
+                const tickets = document.getElementsByName('ticket');
+                let isAnyChecked = false;
+                for(let i=0; i<tickets.length; i++) {
+                    if(tickets[i].checked && !tickets[i].disabled) isAnyChecked = true;
+                }
+                if(!isAnyChecked && radioRegular) radioRegular.checked = true;
+            }
+            
+            calculatePrice();
+        }
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('menu-open');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        closeMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileLinks.forEach(link => { link.addEventListener('click', toggleMobileMenu); });
+
+        // Navigation Active State (Scroll Spy)
+        function updateNav() {
+            const sections = document.querySelectorAll('section');
+            const scrollPos = window.scrollY + 200;
+
+            let currentId = 'about'; 
+            sections.forEach(section => {
+                if (section.offsetTop <= scrollPos) {
+                    currentId = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const dot = link.querySelector('.nav-dot');
+                if (link.getAttribute('href') === `#${currentId}`) {
+                    link.classList.add('text-brand-orange');
+                    link.classList.remove('text-gray-500', 'dark:text-gray-400');
+                    if(dot) { dot.classList.add('opacity-100'); dot.classList.remove('opacity-0'); }
+                } else {
+                    link.classList.remove('text-brand-orange');
+                    link.classList.add('text-gray-500', 'dark:text-gray-400');
+                    if(dot) { dot.classList.remove('opacity-100'); dot.classList.add('opacity-0'); }
+                }
+            });
+
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                if (link.getAttribute('href') === `#${currentId}`) {
+                    link.classList.add('text-brand-orange');
+                    link.classList.remove('text-brand-dark', 'dark:text-white');
+                } else {
+                    link.classList.remove('text-brand-orange');
+                    link.classList.add('text-brand-dark', 'dark:text-white');
+                }
+            });
+        }
+
+        // Dark/Light Mode Toggle Logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+        }
+
+        // Magnetic Button Effect
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = `translate(0px, 0px)`;
+            });
+        });
+
+        // Typing Effect
+        const typingText = "รื้อถอน ก่อร่าง และถักทอภูมิปัญญา";
+        let i = 0;
+        function typeWriter() {
+            const el = document.getElementById("typingText");
+            if (el && i < typingText.length) {
+                el.innerHTML += typingText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 80);
+            } else if (el) {
+                el.classList.remove('typewriter-text');
+            }
+        }
+        
+        // Parallax & Scroll Events
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY;
+            const heroImg = document.getElementById('heroImg');
+            if(heroImg) heroImg.style.transform = `translateY(${scrollPos * 0.1}px) scale(1.1)`;
+            updateNav();
+        });
+
+        // Speaker Data
+        // Speaker Data
+        const speakerData = {
+            'speaker1': { 
+                name: 'คุณณภัทร จุฑาทิพรัตน์', role: 'ครูช่างศิลปหัตถกรรม เครื่องเงินวัวลาย', tag: 'SCIENCE', color: 'bg-brand-blue', 
+                img: '1.jpg',
+                desc: 'ผู้เชี่ยวชาญและผู้สืบทอดวิชาการตีและสลักดุนเครื่องเงิน ในงานสัมมนานี้ คุณณภัทรจะมาร่วมเจาะลึกถึงเทคนิคดั้งเดิมที่กำลังเลือนหาย และวิสัยทัศน์ในการปรับเปลี่ยนลวดลายคลาสสิกให้เข้ากับโปรดักส์ยุคใหม่' 
+            },
+            'speaker2': { 
+                name: 'คุณกิรณา กังวาฬวงษ์', role: 'สถาบันวิจัยโลหะและวัสดุแห่งชาติ', tag: 'ART AND DESIGN', color: 'bg-brand-orange', 
+                img: '2.jpg',
+                desc: 'นักวิจัยจากสถาบันวิจัยโลหะและวัสดุแห่งชาติ นำเสนอแนวทางการยืดอายุสีย้อมธรรมชาติและการดัดแปลงโครงสร้างโมเลกุลของเส้นใยธรรมชาติ เพื่อยกระดับงานคราฟต์ไทยสู่อุตสาหกรรมที่ยั่งยืน' 
+            },
+            'speaker3': { 
+                name: 'คุณธัญญวรรณ แช่มชื่น', role: 'สถาบันวิจัยโลหะและวัสดุแห่งชาติ', tag: 'ART AND DESIGN', color: 'bg-brand-orange', 
+                img: '3.jpg',
+                desc: 'นักวิจัยและผู้เชี่ยวชาญด้านวัสดุ ผู้ผลักดันการใช้วัสดุพื้นถิ่น (Vernacular Materials) มาผสมผสานกับการคำนวณเชิงเทคโนโลยีสมัยใหม่ โดยจะมาเป็นหัวหน้าผู้คุม Masterclass โครงสร้างไม้ไผ่และหวาย' 
+            },
+            'speaker4': { 
+                name: 'คุณวารินทร์ทิพย์ แก้วอินต๊ะ', role: 'Creative Director & Innovator', tag: 'ART AND DESIGN', color: 'bg-brand-orange', 
+                img: '4.jpg',
+                desc: 'Creative Director ผู้เชื่อมโยงโลกของการออกแบบร่วมสมัยเข้ากับทักษะของช่างฝีมือท้องถิ่น ผลงานของเธอได้รับการยอมรับในวงกว้าง และเธอกำลังขับเคลื่อนโปรเจกต์การทำงานร่วมกันแบบ Co-production ในระดับภูมิภาค' 
+            },
+            'speaker5': { 
+                name: 'คุณศุภาวิตา พิรักษา', role: 'นักพัฒนานวัตกรรมวัสดุธรรมชาติ', tag: 'ART AND DESIGN', color: 'bg-brand-orange', 
+                img: '5.jpg',
+                desc: 'ผู้เชี่ยวชาญด้านการพัฒนานวัตกรรมวัสดุธรรมชาติที่มุ่งเน้นการสร้างสรรค์สูตรเคลือบเซรามิกแบบใหม่ (Modern Celadon Glaze) เพื่อสร้างเอฟเฟกต์ที่เป็นเอกลักษณ์และปลอดภัยต่อการใช้งานจริง' 
+            },
+            'speaker6': { 
+                name: 'คุณอิทธิฤทธิ์ กุนศิริ', role: 'นักวิชาการและผู้เชี่ยวชาญด้านวัสดุย่อยสลายได้', tag: 'AGRICULTURAL TECHNOLOGY', color: 'bg-brand-green', 
+                img: '6.jpg',
+                desc: 'นักวิชาการผู้เชี่ยวชาญด้านวัสดุย่อยสลายได้ทางชีวภาพ (Biodegradable Materials) ที่จะมาให้มุมมองด้านความยั่งยืนและการประยุกต์ใช้วัสดุเหลือใช้ทางการเกษตรเพื่อต่อยอดในงานคราฟต์' 
+            }
+        };
+
+        function openSpeakerModal(id) {
+            const data = speakerData[id];
+            if(!data) return;
+            document.getElementById('modalSpeakerImg').src = data.img;
+            document.getElementById('modalSpeakerTag').innerText = data.tag;
+            document.getElementById('modalSpeakerTag').className = `absolute bottom-4 left-4 text-white text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-widest ${data.color}`;
+            document.getElementById('modalSpeakerRole').innerText = data.role;
+            document.getElementById('modalSpeakerName').innerText = data.name;
+            document.getElementById('speakerDetailContent').innerText = data.desc;
+
+            const modal = document.getElementById('speakerModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); document.getElementById('speakerModalContent').classList.remove('scale-95'); }, 10);
+        }
+
+        function closeSpeakerModal() {
+            const modal = document.getElementById('speakerModal');
+            modal.classList.add('opacity-0');
+            document.getElementById('speakerModalContent').classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(typeWriter, 500);
+            updateNav();
+            checkTicketAvailability(); 
+        });
+
+        // คำนวณราคา
+        const currentPax = 1; 
+        function calculatePrice() {
+            const tickets = document.getElementsByName('ticket');
+            let ticketValue = "Early Bird Ticket", ticketPrice = 1500;
+            
+            for(let i=0; i<tickets.length; i++) {
+                if(tickets[i].checked && !tickets[i].disabled) {
+                    ticketValue = tickets[i].value;
+                    ticketPrice = parseInt(tickets[i].getAttribute('data-price'));
+                }
+            }
+            
+            const subtotal = ticketPrice * currentPax;
+            const vat = Math.round(subtotal * 0.07);
+            const total = subtotal + vat;
+            
+            document.getElementById('summaryText').innerText = `${ticketValue} (1 ท่าน)`;
+            document.getElementById('summarySubtotal').innerText = `${subtotal.toLocaleString()} ฿`;
+            document.getElementById('summaryVat').innerText = `${vat.toLocaleString()} ฿`;
+            document.getElementById('summaryTotal').innerHTML = `${total.toLocaleString()} <span class="text-sm md:text-lg font-sans font-medium text-gray-400">บาท</span>`;
+            
+            document.getElementById('hiddenTotal').value = total;
+        }
+
+        // สร้างตั๋ว QR Code
+        function generateTicket(name, ticketTier) {
+            document.getElementById('ticketName').innerText = name;
+            document.getElementById('ticketTier').innerText = ticketTier;
+            const qrcodeContainer = document.getElementById('qrcode');
+            qrcodeContainer.innerHTML = '';
+            new QRCode(qrcodeContainer, {
+                text: `ThaiCraft2025|${name}|${ticketTier}|${new Date().getTime()}`,
+                width: 140, height: 140, colorDark : "#0A0D14", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H
+            });
+            setTimeout(() => {
+                const canvas = qrcodeContainer.querySelector('canvas');
+                if(canvas) {
+                    const img = new Image(); img.src = canvas.toDataURL('image/png');
+                    img.style.margin = "auto"; img.style.display = "block";
+                    qrcodeContainer.innerHTML = ''; qrcodeContainer.appendChild(img); 
+                }
+            }, 100);
+            document.getElementById('ticketModal').classList.remove('hidden');
+            setTimeout(() => { document.getElementById('ticketModal').classList.remove('opacity-0'); }, 50);
+        }
+
+        function closeTicket() {
+            document.getElementById('ticketModal').classList.add('opacity-0');
+            setTimeout(() => { document.getElementById('ticketModal').classList.add('hidden'); }, 400);
+        }
+
+        // ระบบลงทะเบียน (Instant Submit - Fire and Forget)
+        // ระบบลงทะเบียน (Instant Submit - Fire and Forget)
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // เช็คว่าถ้าเลือก "อื่นๆ" แล้วไม่ได้พิมพ์ ถือว่าไม่ผ่าน
+            const roleSelect = document.getElementById('roleSelect');
+            const companySelect = document.getElementById('companySelect');
+            if (roleSelect.value === 'other' && document.getElementById('roleOther').value.trim() === '') {
+                Swal.fire('แจ้งเตือน', 'กรุณาระบุตำแหน่ง/อาชีพ ของคุณ', 'warning');
+                return;
+            }
+            if (companySelect.value === 'other' && document.getElementById('companyOther').value.trim() === '') {
+                Swal.fire('แจ้งเตือน', 'กรุณาระบุองค์กร/สตูดิโอ ของคุณ', 'warning');
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'กำลังออกตั๋ว...'; btn.disabled = true;
+
+            const inputName = document.getElementById('inputName').value;
+            
+            // ดึงค่าระดับบัตรที่ถูกเลือก
+            let selectedTicket = "Early Bird Ticket";
+            const tickets = document.getElementsByName('ticket');
+            for(let i=0; i<tickets.length; i++) { 
+                if(tickets[i].checked && !tickets[i].disabled) selectedTicket = tickets[i].value; 
+            }
+
+            const formData = new FormData(this);
+            
+            // *** เพิ่มบรรทัดนี้: ยัดข้อมูลระดับตั๋ว (ticket) ลงไปในฟอร์มก่อนส่ง ***
+            formData.append('ticket', selectedTicket);
+
+            fetch(SCRIPT_URL, { 
+                method: 'POST', 
+                mode: 'no-cors',
+                body: new URLSearchParams(formData) 
+            }).catch(err => console.error('Silent fetch error:', err));
+
+            setTimeout(() => {
+                generateTicket(inputName, selectedTicket);
+                Swal.fire({ 
+                    title: 'ลงทะเบียนสำเร็จ!', 
+                    text: 'โปรดแคปหน้าจอ (Screenshot) E-Ticket ไว้เป็นหลักฐานเพื่อนำไปแสดง ณ จุดลงทะเบียน', 
+                    icon: 'success', 
+                    confirmButtonColor: '#F97316' 
+                });
+                e.target.reset();
+                // ซ่อนช่องอื่นๆ ด้วยถ้าเคยเปิดไว้
+                document.getElementById('roleOther').classList.add('hidden');
+                document.getElementById('companyOther').classList.add('hidden'); 
+                calculatePrice();
+                btn.innerHTML = originalText; 
+                btn.disabled = false;
+            }, 500); 
+        });
+
+    </script>
+</body>
+</html>
