@@ -189,7 +189,7 @@
             
             <div class="bg-white dark:bg-[#111827] p-5 md:p-6 rounded-[24px] stat-card border border-gray-100 dark:border-gray-800 shadow-soft flex flex-col justify-between h-full">
                 <div class="text-[11px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-brand-orange"></span> บัตรพิเศษ (VIP)
+                    <span class="w-2 h-2 rounded-full bg-brand-orange"></span> Early / VIP
                 </div>
                 <div class="text-2xl md:text-3xl font-bold text-brand-dark dark:text-white" id="statVIP">0</div>
             </div>
@@ -299,7 +299,7 @@
             <svg class="cert-corner absolute bottom-5 right-5 w-[40px] h-[40px] text-[#B05E3C] opacity-80 transform rotate-180 z-10 transition-colors duration-300" viewBox="0 0 100 100" fill="currentColor"><polygon points="0,0 100,0 100,3 3,3 3,100 0,100"/><path d="M 10 10 Q 10 40 5 50 Q 20 30 40 10 Z"/></svg>
             <svg class="cert-corner absolute bottom-5 left-5 w-[40px] h-[40px] text-[#B05E3C] opacity-80 transform -rotate-90 z-10 transition-colors duration-300" viewBox="0 0 100 100" fill="currentColor"><polygon points="0,0 100,0 100,3 3,3 3,100 0,100"/><path d="M 10 10 Q 10 40 5 50 Q 20 30 40 10 Z"/></svg>
 
-            <!-- ================= Content Container (แก้ปัญหาข้อความทับลายเซ็น) ================= -->
+            <!-- ================= Content Container ================= -->
             <div class="w-full flex-1 flex flex-col items-center justify-center pt-2 pb-[120px] z-10">
                 <!-- ตราสัญลักษณ์ด้านบน -->
                 <div class="mb-4 text-[#B05E3C] drop-shadow-sm cert-corner transition-colors duration-300">
@@ -336,17 +336,15 @@
                 </p>
             </div>
 
-            <!-- ================= Footer (ล็อกตำแหน่งขอบล่าง ป้องกันขอบตก) ================= -->
+            <!-- ================= Footer ================= -->
             <div class="absolute bottom-[40px] left-0 w-full flex justify-between items-end px-[70px] z-10">
                 
                 <!-- Left: Official Seal -->
                 <div class="flex flex-col items-center">
                     <div id="certSealContainer" class="w-[85px] h-[85px] relative flex items-center justify-center shadow-sm rounded-full bg-white border border-gray-100 transition-colors duration-300">
-                        <!-- ตราสีแดง (Regular) -->
                         <svg id="certSealRed" viewBox="0 0 100 100" class="absolute inset-0 w-full h-full text-[#B03A2E] opacity-90 transition-opacity duration-300" fill="currentColor">
                             <path d="M50 0 L55 8 L65 5 L68 15 L79 14 L78 24 L89 27 L85 36 L95 43 L88 50 L95 57 L85 64 L89 73 L78 76 L79 86 L68 85 L65 95 L55 92 L50 100 L45 92 L35 95 L32 85 L21 86 L22 76 L11 73 L15 64 L5 57 L12 50 L5 43 L15 36 L11 27 L22 24 L21 14 L32 15 L35 5 L45 8 Z"/>
                         </svg>
-                        <!-- ตราสีทอง (VIP) -->
                         <svg id="certSealGold" viewBox="0 0 100 100" class="absolute inset-0 w-full h-full text-[#D4AF37] opacity-0 transition-opacity duration-300 drop-shadow-md" fill="currentColor">
                             <path d="M50 0 L55 8 L65 5 L68 15 L79 14 L78 24 L89 27 L85 36 L95 43 L88 50 L95 57 L85 64 L89 73 L78 76 L79 86 L68 85 L65 95 L55 92 L50 100 L45 92 L35 95 L32 85 L21 86 L22 76 L11 73 L15 64 L5 57 L12 50 L5 43 L15 36 L11 27 L22 24 L21 14 L32 15 L35 5 L45 8 Z"/>
                         </svg>
@@ -361,7 +359,7 @@
                     <div id="certSealText" class="text-[9px] text-gray-400 uppercase tracking-widest mt-3 font-bold transition-colors duration-300">Official Seal</div>
                 </div>
 
-                <!-- Right: Signature (ใช้ SVG แทนรูปภาพ) -->
+                <!-- Right: Signature -->
                 <div class="text-center w-56 pr-2">
                     <div class="border-b border-gray-300 pb-1 mb-2 relative w-48 mx-auto">
                         <svg class="h-10 mx-auto opacity-75" viewBox="0 0 200 60" fill="none" stroke="#111827" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -389,7 +387,6 @@
 
     <!-- Scripts -->
     <script>
-        // URL ของ Google Apps Script (ห้ามแก้)
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFnp09VDXGq1sQuV9YYFbi5-vxYe_Lp3EASi85FLDlgYIkgo72H3Z2iltPICm9RviaUQ/exec';
         
         let chartInstance = null;
@@ -486,7 +483,7 @@
             }
 
             const rows = data.slice(1).reverse();
-            let totalPax = 0, totalRev = 0, countRegular = 0, countVIP = 0;
+            let totalPax = 0, totalRev = 0, countRegular = 0, countEarly = 0, countVIP = 0;
             
             tbody.innerHTML = '';
             countBadge.innerText = `${rows.length} รายการ`;
@@ -504,7 +501,8 @@
                 const total = parseFloat(row[10]) || 0;
 
                 totalPax += pax; totalRev += total;
-                if(ticket.includes('Regular') || ticket.includes('Early')) countRegular += pax;
+                if(ticket.includes('Regular')) countRegular += pax;
+                else if(ticket.includes('Early')) countEarly += pax;
                 else countVIP += pax;
 
                 let ticketBadge = ticket ? `<span class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider">${ticket}</span>` : '';
@@ -556,13 +554,14 @@
             animateValue("statPax", 0, totalPax, 1000);
             animateValue("statRev", 0, totalRev, 1000, true);
             animateValue("statRegular", 0, countRegular, 1000);
-            animateValue("statVIP", 0, countVIP, 1000);
-            renderChart(countRegular, countVIP);
+            animateValue("statVIP", 0, countEarly + countVIP, 1000);
+            renderChart(countRegular, countEarly, countVIP);
         }
 
-        function renderChart(countRegular, countVIP) {
-            const totalTickets = countRegular + countVIP;
+        function renderChart(countRegular, countEarly, countVIP) {
+            const totalTickets = countRegular + countEarly + countVIP;
             const regPct = totalTickets > 0 ? Math.round((countRegular / totalTickets) * 100) : 0;
+            const earlyPct = totalTickets > 0 ? Math.round((countEarly / totalTickets) * 100) : 0;
             const vipPct = totalTickets > 0 ? Math.round((countVIP / totalTickets) * 100) : 0;
 
             document.getElementById('chartTotal').innerText = totalTickets.toLocaleString();
@@ -579,8 +578,18 @@
                 </div>
                 <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-800/30 px-3 py-2 rounded-xl border border-gray-100 dark:border-gray-700/50 mt-1.5 transition-colors">
                     <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-brand-blue"></span>
+                        <span class="text-[10px] text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">Early Bird</span>
+                    </div>
+                    <div class="text-right flex items-baseline gap-1">
+                        <span class="text-xs font-bold text-brand-dark dark:text-white">${countEarly.toLocaleString()}</span>
+                        <span class="text-[9px] font-bold text-gray-400">${earlyPct}%</span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-800/30 px-3 py-2 rounded-xl border border-gray-100 dark:border-gray-700/50 mt-1.5 transition-colors">
+                    <div class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-brand-orange"></span>
-                        <span class="text-[10px] text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">Early / VIP</span>
+                        <span class="text-[10px] text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">VIP Pass</span>
                     </div>
                     <div class="text-right flex items-baseline gap-1">
                         <span class="text-xs font-bold text-brand-dark dark:text-white">${countVIP.toLocaleString()}</span>
@@ -595,9 +604,12 @@
             const tooltipBorder = isDark ? '#334155' : '#E2E8F0';
 
             const ctx = document.getElementById('ticketChart').getContext('2d');
+            const chartData = [countRegular, countEarly, countVIP];
+            const chartColors = [isDark ? '#475569' : '#CBD5E1', '#3B82F6', '#F97316'];
             
             if(window.chartInstance) {
-                window.chartInstance.data.datasets[0].data = [countRegular, countVIP];
+                window.chartInstance.data.datasets[0].data = chartData;
+                window.chartInstance.data.datasets[0].backgroundColor = chartColors;
                 window.chartInstance.options.plugins.tooltip.backgroundColor = tooltipBg;
                 window.chartInstance.options.plugins.tooltip.titleColor = tooltipText;
                 window.chartInstance.options.plugins.tooltip.bodyColor = tooltipText;
@@ -607,10 +619,10 @@
                 window.chartInstance = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Regular', 'Early/VIP'],
+                        labels: ['Regular', 'Early Bird', 'VIP Pass'],
                         datasets: [{
-                            data: [countRegular, countVIP],
-                            backgroundColor: [isDark ? '#475569' : '#CBD5E1', '#F97316'],
+                            data: chartData,
+                            backgroundColor: chartColors,
                             borderWidth: 0,
                             hoverOffset: 4
                         }]
@@ -662,7 +674,6 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        // เปิดใบประกาศ
         function openCertificate(name, ticket) {
             document.getElementById('certNameDisplay').innerText = name;
             window.currentCertName = name;
