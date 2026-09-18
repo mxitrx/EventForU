@@ -81,7 +81,6 @@
             to { background-position: -200% center; }
         }
         
-        /* สีทองสว่างแบบ Luxury Gold Foil */
         .text-gold-shine {
             background: linear-gradient(to right, #D4AF37 0%, #FFF5C3 25%, #B38728 50%, #FFF5C3 75%, #D4AF37 100%);
             background-size: 200% auto;
@@ -97,7 +96,6 @@
             animation: shine 4s linear infinite;
         }
 
-        /* ลายน้ำ QSNCC บนใบประกาศ */
         .cert-qsncc-bg {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23B05E3C' stroke-width='1'%3E%3Cpath d='M40 0l40 40-40 40L0 40z'/%3E%3Cpath d='M40 15l25 25-25 25-25-25z'/%3E%3Cpath d='M40 25l15 15-15 15-15-15z'/%3E%3Ccircle cx='40' cy='40' r='4' fill='%23B05E3C'/%3E%3Cpath d='M0 0l25 25M80 0L55 25M0 80l25-25M80 80L55 55'/%3E%3C/g%3E%3C/svg%3E");
@@ -137,8 +135,8 @@
             
             <div class="flex gap-3 md:gap-4 items-center">
                 <button onclick="toggleTheme()" class="p-2.5 rounded-full bg-gray-100/50 dark:bg-gray-800/50 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 focus:outline-none backdrop-blur-sm border border-transparent dark:border-gray-700">
-                        <svg class="w-4 h-4 hidden dark:block text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                        <svg class="w-4 h-4 block dark:hidden text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="w-4 h-4 hidden dark:block text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="w-4 h-4 block dark:hidden text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </button>
 
                 <button onclick="exportCSV()" class="hidden md:flex items-center gap-2 bg-white dark:bg-[#111827] hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 px-5 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow">
@@ -146,12 +144,14 @@
                     ออกรายงาน (CSV)
                 </button>
 
-                <!-- เพิ่ม: แถบแสดงสถานะอัปเดตข้อมูลล่าสุด -->
-                <div class="hidden lg:flex flex-col items-end mr-3">
-                    <span class="text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-widest font-bold">อัปเดตล่าสุด</span>
-                    <span id="lastSyncTime" class="text-[12px] font-mono font-bold text-gray-600 dark:text-gray-300">-</span>
+                <!-- แถบแสดงสถานะ Real-time อัปเดตล่าสุด -->
+                <div class="hidden lg:flex flex-col items-end mx-2">
+                    <span class="text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-widest font-bold">สถานะระบบ</span>
+                    <span id="lastSyncTime" class="text-[12px] font-mono font-bold text-gray-600 dark:text-gray-300 flex items-center">
+                        <span class="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 shadow-[0_0_8px_#10B981] animate-pulse"></span>
+                        กำลังเชื่อมต่อ...
+                    </span>
                 </div>
-
             </div>
         </div>
     </nav>
@@ -159,50 +159,64 @@
     <!-- Main Content -->
     <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 flex-grow w-full">
         
-        <!-- แถวสถิติ (4 กล่อง) -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
-            <div class="bg-white dark:bg-[#111827] p-5 md:p-6 rounded-[24px] stat-card border border-gray-100 dark:border-gray-800 shadow-soft flex flex-col justify-between h-full relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none"></div>
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        <!-- แถวสถิติ 5 กล่อง -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 mb-10">
+            <!-- กล่องที่ 1: ผู้เข้าร่วม -->
+            <div class="bg-white dark:bg-[#111827] p-6 rounded-[24px] stat-card border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between min-h-[150px] relative overflow-hidden">
+                <div class="absolute -top-16 -right-16 w-48 h-48 bg-[#F0F7FF] dark:bg-blue-500/5 rounded-full pointer-events-none transition-colors"></div>
+                <div class="flex items-center gap-3 relative z-10">
+                    <div class="w-10 h-10 rounded-full bg-[#EBF4FF] dark:bg-blue-500/10 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     </div>
-                    <span class="text-[11px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest">ผู้เข้าร่วม</span>
+                    <span class="text-[13px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest">ผู้เข้าร่วม</span>
                 </div>
-                <div class="text-3xl md:text-4xl font-black text-brand-dark dark:text-white" id="statPax">0</div>
+                <div class="text-[40px] leading-none font-black text-[#111827] dark:text-white relative z-10 mt-6" id="statPax">0</div>
             </div>
             
-            <div class="bg-white dark:bg-[#111827] p-5 md:p-6 rounded-[24px] stat-card border border-gray-100 dark:border-gray-800 shadow-soft flex flex-col justify-between h-full relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-full pointer-events-none"></div>
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <!-- กล่องที่ 2: ยอดขายรวม -->
+            <div class="bg-white dark:bg-[#111827] p-6 rounded-[24px] stat-card border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between min-h-[150px] relative overflow-hidden">
+                <div class="absolute -top-16 -right-16 w-48 h-48 bg-[#F0FDF4] dark:bg-emerald-500/5 rounded-full pointer-events-none transition-colors"></div>
+                <div class="flex items-center gap-3 relative z-10">
+                    <div class="w-10 h-10 rounded-full bg-[#DCFCE7] dark:bg-emerald-500/10 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#10B981]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <span class="text-[11px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest">ยอดขายรวม</span>
+                    <span class="text-[13px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest">ยอดขายรวม</span>
                 </div>
-                <div class="text-2xl md:text-3xl font-black text-brand-green dark:text-emerald-400" id="statRev">฿0</div>
+                <div class="text-[40px] leading-none font-black text-[#10B981] dark:text-emerald-400 relative z-10 mt-6" id="statRev">฿0</div>
             </div>
             
-            <div class="bg-white dark:bg-[#111827] p-5 md:p-6 rounded-[24px] stat-card border border-gray-100 dark:border-gray-800 shadow-soft flex flex-col justify-between h-full">
-                <div class="text-[11px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600"></span> บัตรทั่วไป
+            <!-- กล่องที่ 3: บัตรทั่วไป -->
+            <div class="bg-white dark:bg-[#111827] p-6 rounded-[24px] stat-card border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between min-h-[150px]">
+                <div class="text-[13px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest flex items-center gap-2 mt-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#CBD5E1] dark:bg-gray-600"></span> บัตรทั่วไป
                 </div>
-                <div class="text-2xl md:text-3xl font-bold text-gray-700 dark:text-gray-200" id="statRegular">0</div>
+                <div class="text-[40px] leading-none font-black text-[#334155] dark:text-gray-200 mt-6" id="statRegular">0</div>
             </div>
             
-            <div class="bg-white dark:bg-[#111827] p-5 md:p-6 rounded-[24px] stat-card border border-gray-100 dark:border-gray-800 shadow-soft flex flex-col justify-between h-full">
-                <div class="text-[11px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-brand-orange"></span> Early / VIP
+            <!-- กล่องที่ 4: Early Bird -->
+            <div class="bg-white dark:bg-[#111827] p-6 rounded-[24px] stat-card border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between min-h-[150px]">
+                <div class="text-[13px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest flex items-center gap-2 mt-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#3B82F6]"></span> Early Bird
                 </div>
-                <div class="text-2xl md:text-3xl font-bold text-brand-dark dark:text-white" id="statVIP">0</div>
+                <div class="text-[40px] leading-none font-black text-[#111827] dark:text-white mt-6" id="statEarly">0</div>
+            </div>
+
+            <!-- กล่องที่ 5: VIP Pass -->
+            <div class="bg-white dark:bg-[#111827] p-6 rounded-[24px] stat-card border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between min-h-[150px]">
+                <div class="text-[13px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest flex items-center gap-2 mt-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#F97316]"></span> VIP Pass
+                </div>
+                <div class="text-[40px] leading-none font-black text-[#111827] dark:text-white mt-6" id="statVIP">0</div>
             </div>
         </div>
 
-        <!-- แถวกราฟ และ ตารางข้อมูล -->
+        <!-- แถวกราฟโดนัท และ ตารางข้อมูล -->
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-8 mb-10">
             
-            <!-- กราฟสัดส่วนบัตร -->
+            <!-- คอลัมน์ซ้าย: กราฟสัดส่วนบัตร และ กล่องยอดนิยม -->
             <div class="bg-white dark:bg-[#111827] p-6 lg:p-8 rounded-[24px] lg:col-span-1 flex flex-col items-center shadow-soft border border-gray-100 dark:border-gray-800 transition-colors h-fit lg:sticky lg:top-28">
+                
+                <!-- ส่วนกราฟโดนัท -->
                 <div class="w-full flex justify-between items-center mb-6">
                     <h3 class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">สัดส่วนบัตร</h3>
                     <div class="p-1.5 bg-gray-50 dark:bg-gray-800 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg></div>
@@ -217,21 +231,28 @@
                 </div>
                 <div class="w-full mt-auto space-y-2 pt-6" id="chartLegend"></div>
 
-                <!-- เพิ่ม: สรุปความนิยมของเวิร์กชอป -->
+                <!-- สรุปความนิยมของเวิร์กชอป -->
                 <div class="w-full mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">เวิร์กชอปยอดนิยม</h3>
                         <span class="w-2 h-2 rounded-full bg-brand-pink animate-pulse"></span>
                     </div>
-                    <div id="workshopStats" class="space-y-2.5">
-                        <!-- ข้อมูลเวิร์กชอปจะถูกดึงมาแสดงที่นี่อัตโนมัติ -->
-                    </div>
+                    <div id="workshopStats" class="space-y-2.5"></div>
                 </div>
 
+                <!-- สรุปองค์กรที่เข้าร่วมสูงสุด -->
+                <div class="w-full mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">องค์กรที่เข้าร่วมสูงสุด</h3>
+                        <span class="w-2 h-2 rounded-full bg-brand-blue animate-pulse"></span>
+                    </div>
+                    <div id="companyStats" class="space-y-2.5"></div>
+                </div>
             </div>
 
-            <!-- ส่วนของตารางข้อมูล -->
-            <div class="bg-white dark:bg-[#111827] rounded-[24px] lg:col-span-3 flex flex-col h-[700px] shadow-soft border border-gray-100 dark:border-gray-800 overflow-hidden transition-colors relative">
+            <!-- ส่วนของตารางข้อมูล (ปรับให้แสดงแบบยาวๆ h-auto) -->
+            <div id="tableContainer" class="bg-white dark:bg-[#111827] rounded-[24px] lg:col-span-3 flex flex-col h-auto min-h-[700px] shadow-soft border border-gray-100 dark:border-gray-800 overflow-hidden transition-colors relative">
+                
                 <div class="px-6 py-5 border-b border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4 bg-white/50 dark:bg-[#111827]/50 backdrop-blur-md z-20">
                     <h2 class="text-base font-bold text-brand-dark dark:text-white flex items-center gap-2">
                         รายชื่อผู้ลงทะเบียน
@@ -239,6 +260,8 @@
                     </h2>
                     
                     <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                        
+                        <!-- ค้นหา -->
                         <div class="relative w-full sm:w-80 group">
                             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-gray-400 group-focus-within:text-brand-orange transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -246,7 +269,7 @@
                             <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="ค้นหาชื่อ, อีเมล, บริษัท..." class="w-full bg-gray-50 dark:bg-[#0A0D14] border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 pl-10 pr-4 py-2 rounded-xl text-sm transition-all focus:bg-white dark:focus:bg-[#111827]">
                         </div>
                         
-                        <!-- เพิ่ม: ระบบตัวกรองประเภทบัตร -->
+                        <!-- ตัวกรองประเภทบัตร -->
                         <select id="ticketFilter" onchange="searchTable()" class="w-full sm:w-36 bg-gray-50 dark:bg-[#0A0D14] border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 rounded-xl text-sm transition-all focus:bg-white dark:focus:bg-[#111827]">
                             <option value="">บัตรทั้งหมด</option>
                             <option value="regular">Regular</option>
@@ -254,7 +277,6 @@
                             <option value="vip">VIP Pass</option>
                         </select>
                     </div>
-
                 </div>
                 
                 <div class="overflow-auto flex-grow relative bg-white dark:bg-[#111827]">
@@ -283,116 +305,52 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white dark:from-[#111827] to-transparent pointer-events-none"></div>
             </div>
         </div>
     </main>
 
-    <!-- ==========================================
-         Certificate Modal (Professional Luxury Design)
-         ========================================== -->
+    <!-- Certificate Modal (Original Design) -->
     <div id="certModal" class="fixed inset-0 z-[120] bg-gray-900/80 backdrop-blur-md flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-300 p-4">
-        
-        <!-- แบ็คกราวน์เอฟเฟกต์รอบๆ ใบประกาศ (แสงเรืองรองสีทองสำหรับ VIP) -->
         <div id="certBgGlow" class="absolute inset-0 overflow-hidden pointer-events-none flex justify-center items-center hidden">
             <div class="w-[600px] h-[600px] bg-[#D4AF37]/20 rounded-full blur-[120px] animate-pulse"></div>
         </div>
-
-        <!-- พื้นที่สำหรับเรนเดอร์ใบประกาศ -->
         <div id="certPrintArea" class="w-[842px] h-[595px] bg-[#FCFBF8] relative overflow-hidden flex flex-col items-center scale-50 sm:scale-75 md:scale-100 transform origin-center shadow-2xl transition-colors duration-300">
-            
-            <!-- สายสะพายมุมขวาบน (ฟอยล์ทองสำหรับ VIP) -->
             <div id="certRibbon" class="absolute -top-6 -right-6 w-32 h-32 overflow-hidden z-30 pointer-events-none hidden">
-                <div class="absolute top-10 -right-10 w-48 bg-gold-shine text-gray-900 text-[10px] font-black py-1.5 text-center transform rotate-45 shadow-[0_5px_15px_rgba(212,175,55,0.4)] tracking-widest uppercase border-y border-[#AA771C]">
-                    VIP Pass
-                </div>
+                <div class="absolute top-10 -right-10 w-48 bg-gold-shine text-gray-900 text-[10px] font-black py-1.5 text-center transform rotate-45 shadow-[0_5px_15px_rgba(212,175,55,0.4)] tracking-widest uppercase border-y border-[#AA771C]">VIP Pass</div>
             </div>
-
-            <!-- ลายน้ำพื้นหลัง QSNCC -->
             <div id="certPatternBg" class="cert-qsncc-bg opacity-[0.04]"></div>
-
-            <!-- ขอบใบประกาศมาตรฐาน -->
             <div class="absolute inset-5 border-[1px] border-[#B05E3C]/40 pointer-events-none z-10 cert-border transition-colors duration-300"></div>
             <div class="absolute inset-[24px] border-[0.5px] border-[#B05E3C]/20 pointer-events-none z-10 cert-border transition-colors duration-300"></div>
-
-            <!-- กรอบพิเศษสำหรับ VIP -->
             <div id="certVipFrame" class="absolute inset-[16px] border-[2px] border-[#D4AF37] z-10 pointer-events-none hidden shadow-[inset_0_0_40px_rgba(212,175,55,0.1)]">
                 <div class="absolute inset-[6px] border-[0.5px] border-[#D4AF37] opacity-60"></div>
             </div>
-
-            <!-- ลายกนกมุม -->
             <svg class="cert-corner absolute top-5 left-5 w-[40px] h-[40px] text-[#B05E3C] opacity-80 z-10 transition-colors duration-300" viewBox="0 0 100 100" fill="currentColor"><polygon points="0,0 100,0 100,3 3,3 3,100 0,100"/><path d="M 10 10 Q 10 40 5 50 Q 20 30 40 10 Z"/></svg>
             <svg class="cert-corner absolute top-5 right-5 w-[40px] h-[40px] text-[#B05E3C] opacity-80 transform rotate-90 z-10 transition-colors duration-300" viewBox="0 0 100 100" fill="currentColor"><polygon points="0,0 100,0 100,3 3,3 3,100 0,100"/><path d="M 10 10 Q 10 40 5 50 Q 20 30 40 10 Z"/></svg>
             <svg class="cert-corner absolute bottom-5 right-5 w-[40px] h-[40px] text-[#B05E3C] opacity-80 transform rotate-180 z-10 transition-colors duration-300" viewBox="0 0 100 100" fill="currentColor"><polygon points="0,0 100,0 100,3 3,3 3,100 0,100"/><path d="M 10 10 Q 10 40 5 50 Q 20 30 40 10 Z"/></svg>
             <svg class="cert-corner absolute bottom-5 left-5 w-[40px] h-[40px] text-[#B05E3C] opacity-80 transform -rotate-90 z-10 transition-colors duration-300" viewBox="0 0 100 100" fill="currentColor"><polygon points="0,0 100,0 100,3 3,3 3,100 0,100"/><path d="M 10 10 Q 10 40 5 50 Q 20 30 40 10 Z"/></svg>
-
-            <!-- ================= Content Container ================= -->
             <div class="w-full flex-1 flex flex-col items-center justify-center pt-2 pb-[120px] z-10">
-                <!-- ตราสัญลักษณ์ด้านบน -->
                 <div class="mb-4 text-[#B05E3C] drop-shadow-sm cert-corner transition-colors duration-300">
-                    <svg class="w-12 h-12" viewBox="0 0 100 100" fill="currentColor">
-                        <path d="M 50 0 L 60 40 L 100 50 L 60 60 L 50 100 L 40 60 L 0 50 L 40 40 Z" />
-                        <circle cx="50" cy="50" r="12" fill="#FCFBF8" />
-                        <circle cx="50" cy="50" r="6" />
-                    </svg>
+                    <svg class="w-12 h-12" viewBox="0 0 100 100" fill="currentColor"><path d="M 50 0 L 60 40 L 100 50 L 60 60 L 50 100 L 40 60 L 0 50 L 40 40 Z" /><circle cx="50" cy="50" r="12" fill="#FCFBF8" /><circle cx="50" cy="50" r="6" /></svg>
                 </div>
-
                 <div class="text-[#D4A373] tracking-[0.4em] font-bold text-[11px] mb-2 uppercase font-sans">Thai Craft Symposium 2025</div>
-                
-                <h1 id="certTitleEn" class="text-[52px] font-black tracking-widest font-serif text-[#B05E3C] leading-none mb-1 drop-shadow-sm">
-                    CERTIFICATE
-                </h1>
-                <div id="certTitleTh" class="text-[16px] tracking-[0.3em] font-light font-sans text-[#B05E3C] mb-8">
-                    ใบประกาศนียบัตร
-                </div>
-                
+                <h1 id="certTitleEn" class="text-[52px] font-black tracking-widest font-serif text-[#B05E3C] leading-none mb-1 drop-shadow-sm">CERTIFICATE</h1>
+                <div id="certTitleTh" class="text-[16px] tracking-[0.3em] font-light font-sans text-[#B05E3C] mb-8">ใบประกาศนียบัตร</div>
                 <p class="text-gray-500 text-[13px] mb-4 font-sans tracking-widest uppercase">This is to certify that</p>
-                
-                <!-- Name -->
-                <div id="certNameDisplay" class="text-[46px] font-bold mb-6 py-2 text-center w-full max-w-3xl px-12 leading-normal font-serif text-[#B05E3C] relative">
-                    ชื่อ-นามสกุล
-                    <!-- เส้นขีดล่าง -->
-                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[80%] h-[1px] bg-gradient-to-r from-transparent via-[#D4A373] to-transparent"></div>
-                </div>
-                
-                <!-- Description -->
-                <p class="text-gray-700 text-center max-w-2xl text-[15px] leading-relaxed font-light font-sans relative">
-                    has successfully participated in the seminar and workshop<br>
-                    <b class="font-medium">"Deconstructing & Re-crafting Heritage"</b><br>
-                    <span class="text-[13px] text-gray-500 mt-2 block">เพื่อร่วมเป็นส่วนหนึ่งในการอนุรักษ์ ฟื้นฟู และพัฒนานวัตกรรมงานคราฟต์ไทยอย่างยั่งยืน</span>
-                </p>
+                <div id="certNameDisplay" class="text-[46px] font-bold mb-6 py-2 text-center w-full max-w-3xl px-12 leading-normal font-serif text-[#B05E3C] relative">ชื่อ-นามสกุล<div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[80%] h-[1px] bg-gradient-to-r from-transparent via-[#D4A373] to-transparent"></div></div>
+                <p class="text-gray-700 text-center max-w-2xl text-[15px] leading-relaxed font-light font-sans relative">has successfully participated in the seminar and workshop<br><b class="font-medium">"Deconstructing & Re-crafting Heritage"</b><br><span class="text-[13px] text-gray-500 mt-2 block">เพื่อร่วมเป็นส่วนหนึ่งในการอนุรักษ์ ฟื้นฟู และพัฒนานวัตกรรมงานคราฟต์ไทยอย่างยั่งยืน</span></p>
             </div>
-
-            <!-- ================= Footer ================= -->
             <div class="absolute bottom-[40px] left-0 w-full flex justify-between items-end px-[70px] z-10">
-                
-                <!-- Left: Official Seal -->
                 <div class="flex flex-col items-center">
                     <div id="certSealContainer" class="w-[85px] h-[85px] relative flex items-center justify-center shadow-sm rounded-full bg-white border border-gray-100 transition-colors duration-300">
-                        <svg id="certSealRed" viewBox="0 0 100 100" class="absolute inset-0 w-full h-full text-[#B03A2E] opacity-90 transition-opacity duration-300" fill="currentColor">
-                            <path d="M50 0 L55 8 L65 5 L68 15 L79 14 L78 24 L89 27 L85 36 L95 43 L88 50 L95 57 L85 64 L89 73 L78 76 L79 86 L68 85 L65 95 L55 92 L50 100 L45 92 L35 95 L32 85 L21 86 L22 76 L11 73 L15 64 L5 57 L12 50 L5 43 L15 36 L11 27 L22 24 L21 14 L32 15 L35 5 L45 8 Z"/>
-                        </svg>
-                        <svg id="certSealGold" viewBox="0 0 100 100" class="absolute inset-0 w-full h-full text-[#D4AF37] opacity-0 transition-opacity duration-300 drop-shadow-md" fill="currentColor">
-                            <path d="M50 0 L55 8 L65 5 L68 15 L79 14 L78 24 L89 27 L85 36 L95 43 L88 50 L95 57 L85 64 L89 73 L78 76 L79 86 L68 85 L65 95 L55 92 L50 100 L45 92 L35 95 L32 85 L21 86 L22 76 L11 73 L15 64 L5 57 L12 50 L5 43 L15 36 L11 27 L22 24 L21 14 L32 15 L35 5 L45 8 Z"/>
-                        </svg>
-                        <div class="absolute inset-2.5 rounded-full border-[1px] border-[#FFFDF9] flex items-center justify-center flex-col">
-                            <div class="absolute inset-[3px] rounded-full border border-[#FFFDF9] border-dashed opacity-50"></div>
-                            <svg class="w-5 h-5 text-[#FFFDF9] mb-1 z-10" viewBox="0 0 100 100" fill="currentColor">
-                                <path d="M 50 10 Q 50 50 10 50 Q 50 50 50 90 Q 50 50 90 50 Q 50 50 50 10 Z" />
-                            </svg>
-                            <span class="text-[#FFFDF9] font-bold text-[7px] font-sans tracking-widest z-10">TCS</span>
-                        </div>
+                        <svg id="certSealRed" viewBox="0 0 100 100" class="absolute inset-0 w-full h-full text-[#B03A2E] opacity-90 transition-opacity duration-300" fill="currentColor"><path d="M50 0 L55 8 L65 5 L68 15 L79 14 L78 24 L89 27 L85 36 L95 43 L88 50 L95 57 L85 64 L89 73 L78 76 L79 86 L68 85 L65 95 L55 92 L50 100 L45 92 L35 95 L32 85 L21 86 L22 76 L11 73 L15 64 L5 57 L12 50 L5 43 L15 36 L11 27 L22 24 L21 14 L32 15 L35 5 L45 8 Z"/></svg>
+                        <svg id="certSealGold" viewBox="0 0 100 100" class="absolute inset-0 w-full h-full text-[#D4AF37] opacity-0 transition-opacity duration-300 drop-shadow-md" fill="currentColor"><path d="M50 0 L55 8 L65 5 L68 15 L79 14 L78 24 L89 27 L85 36 L95 43 L88 50 L95 57 L85 64 L89 73 L78 76 L79 86 L68 85 L65 95 L55 92 L50 100 L45 92 L35 95 L32 85 L21 86 L22 76 L11 73 L15 64 L5 57 L12 50 L5 43 L15 36 L11 27 L22 24 L21 14 L32 15 L35 5 L45 8 Z"/></svg>
+                        <div class="absolute inset-2.5 rounded-full border-[1px] border-[#FFFDF9] flex items-center justify-center flex-col"><div class="absolute inset-[3px] rounded-full border border-[#FFFDF9] border-dashed opacity-50"></div><svg class="w-5 h-5 text-[#FFFDF9] mb-1 z-10" viewBox="0 0 100 100" fill="currentColor"><path d="M 50 10 Q 50 50 10 50 Q 50 50 50 90 Q 50 50 90 50 Q 50 50 50 10 Z" /></svg><span class="text-[#FFFDF9] font-bold text-[7px] font-sans tracking-widest z-10">TCS</span></div>
                     </div>
                     <div id="certSealText" class="text-[9px] text-gray-400 uppercase tracking-widest mt-3 font-bold transition-colors duration-300">Official Seal</div>
                 </div>
-
-                <!-- Right: Signature -->
                 <div class="text-center w-56 pr-2">
                     <div class="border-b border-gray-300 pb-1 mb-2 relative w-48 mx-auto">
-                        <svg class="h-10 mx-auto opacity-75" viewBox="0 0 200 60" fill="none" stroke="#111827" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 40 C 20 20, 30 10, 40 25 C 50 40, 60 50, 70 30 C 80 10, 90 20, 100 40 C 110 60, 120 40, 130 20 C 140 0, 150 30, 160 40 C 170 50, 180 30, 190 20" />
-                            <path d="M45 15 L 55 45 M105 15 L 115 45 M160 20 L 165 25" />
-                        </svg>
+                        <svg class="h-10 mx-auto opacity-75" viewBox="0 0 200 60" fill="none" stroke="#111827" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 40 C 20 20, 30 10, 40 25 C 50 40, 60 50, 70 30 C 80 10, 90 20, 100 40 C 110 60, 120 40, 130 20 C 140 0, 150 30, 160 40 C 170 50, 180 30, 190 20" /><path d="M45 15 L 55 45 M105 15 L 115 45 M160 20 L 165 25" /></svg>
                     </div>
                     <p class="text-[#1A2530] text-[13px] font-bold font-sans">ศ.ดร. นลินี สุวรรณากร</p>
                     <p class="text-gray-500 text-[10px] tracking-widest uppercase mt-0.5 font-sans mb-1">Director of Symposium</p>
@@ -400,15 +358,11 @@
             </div>
         </div>
         
-        <!-- Modal Actions -->
         <div class="flex gap-3 mt-6 z-10 w-full max-w-sm px-4">
             <button onclick="downloadCertificate()" id="btnDownloadCert" class="flex-1 bg-brand-dark hover:bg-gray-800 text-white py-3.5 rounded-2xl text-[11px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg hover:-translate-y-0.5">
-                <svg class="w-4 h-4 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> 
-                บันทึกภาพ
+                <svg class="w-4 h-4 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> บันทึกภาพ
             </button>
-            <button onclick="closeCertModal()" class="bg-white hover:bg-gray-50 text-gray-700 py-3.5 px-6 rounded-2xl text-[11px] font-bold uppercase tracking-widest transition-all shadow-sm border border-gray-200">
-                ปิดหน้าต่าง
-            </button>
+            <button onclick="closeCertModal()" class="bg-white hover:bg-gray-50 text-gray-700 py-3.5 px-6 rounded-2xl text-[11px] font-bold uppercase tracking-widest transition-all shadow-sm border border-gray-200">ปิดหน้าต่าง</button>
         </div>
     </div>
 
@@ -420,6 +374,11 @@
         let globalData = []; 
         let isFetching = false;
         let lastDataString = ""; 
+
+        window.onload = () => {
+            fetchData();
+            setInterval(() => { fetchData(true); }, 3000); 
+        };
 
         function toggleTheme() {
             const html = document.documentElement;
@@ -435,51 +394,54 @@
             }
         });
 
+        function toggleFullscreenTable() {
+            const tableContainer = document.getElementById('tableContainer');
+            const icon = document.getElementById('fsIcon');
+            
+            if (!document.fullscreenElement) {
+                tableContainer.requestFullscreen().catch(err => alert(`ไม่สามารถขยายจอได้: ${err.message}`));
+                tableContainer.classList.add('p-4', 'overflow-y-auto'); 
+                icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>`;
+            } else {
+                document.exitFullscreen();
+                tableContainer.classList.remove('p-4', 'overflow-y-auto');
+                icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>`;
+            }
+        }
+
         function fetchData(isSilent = false) {
-    if(isFetching) return;
-    isFetching = true;
+            if(isFetching) return;
+            isFetching = true;
 
-    const btn = document.getElementById('refreshBtn');
-    let originalText = "";
-    
-    // เช็คว่ามีปุ่มอยู่หรือไม่
-    if (btn) {
-        originalText = btn.innerHTML;
-        btn.innerHTML = `<svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>กำลังโหลด...</span>`;
-    }
-    
-    if(!isSilent) {
-        document.getElementById('tableBody').innerHTML = `
-            <tr><td colspan="5" class="text-center py-20 text-gray-400 animate-pulse font-medium text-sm">กำลังเชื่อมต่อฐานข้อมูล...</td></tr>`;
-    }
-
-    fetch(SCRIPT_URL)
-        .then(async res => {
-            const text = await res.text();
-            try { return JSON.parse(text); } 
-            catch (e) { throw new Error("API Connection Error"); }
-        })
-        .then(data => {
-            const newDataString = JSON.stringify(data);
-            if (isSilent && newDataString === lastDataString) return; 
-            
-            lastDataString = newDataString;
-            globalData = data;
-            processData(data, isSilent);
-            
-            if(document.getElementById("searchInput").value.trim() !== "") searchTable();
-        })
-        .catch(err => {
             if(!isSilent) {
                 document.getElementById('tableBody').innerHTML = `
-                    <tr><td colspan="5" class="text-center py-10 text-red-500 font-medium">โหลดข้อมูลไม่สำเร็จ โปรดลองอีกครั้ง</td></tr>`;
+                    <tr><td colspan="5" class="text-center py-20 text-gray-400 animate-pulse font-medium text-sm">กำลังเชื่อมต่อฐานข้อมูล...</td></tr>`;
             }
-        })
-        .finally(() => { 
-            if (btn) btn.innerHTML = originalText; 
-            isFetching = false;
-        });
-}
+
+            fetch(SCRIPT_URL)
+                .then(async res => {
+                    const text = await res.text();
+                    try { return JSON.parse(text); } catch (e) { throw new Error("API Connection Error"); }
+                })
+                .then(data => {
+                    const newDataString = JSON.stringify(data);
+                    if (isSilent && newDataString === lastDataString) return; 
+                    
+                    lastDataString = newDataString;
+                    globalData = data;
+                    processData(data, isSilent);
+                    if(document.getElementById("searchInput").value.trim() !== "") searchTable();
+                })
+                .catch(err => {
+                    if(!isSilent) document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="text-center py-10 text-red-500 font-medium">โหลดข้อมูลไม่สำเร็จ โปรดลองอีกครั้ง</td></tr>`;
+                })
+                .finally(() => { 
+                    isFetching = false;
+                    const timeStr = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    const syncEl = document.getElementById('lastSyncTime');
+                    if(syncEl) syncEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 shadow-[0_0_8px_#10B981] animate-pulse"></span>${timeStr}`;
+                });
+        }
 
         function animateValue(id, start, end, duration, isCurrency = false) {
             const obj = document.getElementById(id);
@@ -489,15 +451,9 @@
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
                 const currentVal = Math.floor(progress * (end - start) + start);
-                
-                if(isCurrency) obj.innerText = '฿' + currentVal.toLocaleString();
-                else obj.innerText = currentVal.toLocaleString();
-                
+                obj.innerText = (isCurrency ? '฿' : '') + currentVal.toLocaleString();
                 if (progress < 1) window.requestAnimationFrame(step);
-                else {
-                    if(isCurrency) obj.innerText = '฿' + end.toLocaleString();
-                    else obj.innerText = end.toLocaleString();
-                }
+                else obj.innerText = (isCurrency ? '฿' : '') + end.toLocaleString();
             };
             window.requestAnimationFrame(step);
         }
@@ -510,17 +466,39 @@
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center py-20 text-gray-500 font-medium">ยังไม่มีข้อมูลการลงทะเบียน</td></tr>';
                 countBadge.innerText = "0 รายการ";
                 animateValue("statPax", 0, 0, 1000); animateValue("statRev", 0, 0, 1000, true);
-                animateValue("statRegular", 0, 0, 1000); animateValue("statVIP", 0, 0, 1000);
+                animateValue("statRegular", 0, 0, 1000); 
+                animateValue("statEarly", 0, 0, 1000); 
+                animateValue("statVIP", 0, 0, 1000);
                 return;
             }
 
-            const rows = data.slice(1).reverse();
+            const rows = data.slice(1);
             let totalPax = 0, totalRev = 0, countRegular = 0, countEarly = 0, countVIP = 0;
+            const wsCount = {}; const compCount = {};
             
+            rows.forEach(row => {
+                const pax = parseInt(row[7]) || 1;
+                const total = parseFloat(row[10]) || 0;
+                const ticket = row[6] && row[6] !== "-" ? String(row[6]) : "";
+                
+                totalPax += pax; totalRev += total;
+                if(ticket.includes('Regular')) countRegular += pax;
+                else if(ticket.includes('Early')) countEarly += pax;
+                else countVIP += pax;
+
+                const ws = row[8] && row[8] !== "-" && row[8] !== "None" ? String(row[8]) : null;
+                if(ws) wsCount[ws] = (wsCount[ws] || 0) + pax;
+
+                const comp = row[4] && row[4] !== "-" ? String(row[4]).trim() : null;
+                if(comp && comp.toLowerCase() !== "freelance" && comp.toLowerCase() !== "none" && comp.length > 1) {
+                    compCount[comp] = (compCount[comp] || 0) + pax;
+                }
+            });
+
             tbody.innerHTML = '';
             countBadge.innerText = `${rows.length} รายการ`;
-
-            rows.forEach((row, index) => {
+            
+            rows.reverse().forEach((row) => {
                 const date = new Date(row[0]).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
                 const name = row[1] && row[1] !== "-" ? String(row[1]) : "";
                 const email = row[2] && row[2] !== "-" ? String(row[2]) : "";
@@ -532,17 +510,16 @@
                 const workshop = row[8] && row[8] !== "-" && row[8] !== "None" ? String(row[8]) : "";
                 const total = parseFloat(row[10]) || 0;
 
-                totalPax += pax; totalRev += total;
-                if(ticket.includes('Regular')) countRegular += pax;
-                else if(ticket.includes('Early')) countEarly += pax;
-                else countVIP += pax;
-
                 let ticketBadge = ticket ? `<span class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider">${ticket}</span>` : '';
                 if(ticket.includes('VIP') || ticket.includes('Masterclass') || ticket.includes('Early')) {
                     ticketBadge = `<span class="bg-orange-50 dark:bg-orange-500/10 text-brand-orange px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider">${ticket}</span>`;
                 }
 
                 let wsBadge = workshop ? `<div class="mt-1.5 flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400 font-medium"><svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> <span class="truncate max-w-[140px]">${workshop}</span></div>` : ``;
+                
+                let paymentBadge = (total === 0) 
+                    ? `<span class="mt-2 inline-block bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest border border-gray-200 dark:border-gray-700">Free / รอชำระ</span>` 
+                    : `<span class="mt-2 inline-block bg-emerald-50 dark:bg-emerald-500/10 text-brand-green px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest border border-emerald-100 dark:border-emerald-900/50">ชำระแล้ว</span>`;
 
                 const safeNameForCert = name.replace(/'/g, "\\'");
                 const safeTicketForCert = ticket.replace(/'/g, "\\'");
@@ -573,11 +550,10 @@
                     <td class="text-right pr-6">
                         <div class="font-bold text-brand-dark dark:text-white text-[14px]">฿${total.toLocaleString()}</div>
                         <div class="text-[9px] text-gray-400 mt-1 tracking-wider uppercase">${date}</div>
+                        ${paymentBadge}
                     </td>
                     <td class="border-l border-gray-100 dark:border-gray-800/50 align-middle">
-                        <div class="flex flex-col justify-center">
-                            ${certBtnHTML}
-                        </div>
+                        <div class="flex flex-col justify-center">${certBtnHTML}</div>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -586,8 +562,28 @@
             animateValue("statPax", 0, totalPax, 1000);
             animateValue("statRev", 0, totalRev, 1000, true);
             animateValue("statRegular", 0, countRegular, 1000);
-            animateValue("statVIP", 0, countEarly + countVIP, 1000);
+            animateValue("statEarly", 0, countEarly, 1000);
+            animateValue("statVIP", 0, countVIP, 1000);
+
             renderChart(countRegular, countEarly, countVIP);
+            renderStatsList('workshopStats', wsCount, 'brand-orange', 'orange');
+            renderStatsList('companyStats', compCount, 'brand-blue', 'blue');
+        }
+
+        function renderStatsList(containerId, dataObj, colorHex, colorClass) {
+            const sorted = Object.entries(dataObj).sort((a, b) => b[1] - a[1]).slice(0, 3);
+            const container = document.getElementById(containerId);
+            if(container) {
+                container.innerHTML = sorted.length > 0 ? sorted.map((item, index) => `
+                    <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-800/40 px-3 py-2.5 rounded-xl border border-gray-100 dark:border-gray-700/50 hover:border-${colorHex}/30 transition-all">
+                        <div class="flex items-center gap-2.5 overflow-hidden">
+                            <div class="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold ${index === 0 ? `bg-${colorClass}-100 dark:bg-${colorClass}-900/30 text-${colorHex}` : 'bg-gray-200 dark:bg-gray-700 text-gray-500'}">#${index + 1}</div>
+                            <span class="text-[11px] text-gray-700 dark:text-gray-300 font-medium truncate max-w-[140px]" title="${item[0]}">${item[0]}</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-brand-dark dark:text-white bg-white dark:bg-[#111827] px-2 py-1 rounded-md shadow-sm border border-gray-100 dark:border-gray-700">${item[1]}</span>
+                    </div>
+                `).join('') : '<div class="text-center text-xs text-gray-400 py-3">ยังไม่มีข้อมูล</div>';
+            }
         }
 
         function renderChart(countRegular, countEarly, countVIP) {
@@ -600,33 +596,21 @@
             document.getElementById('chartLegend').innerHTML = `
                 <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-800/30 px-3 py-2 rounded-xl border border-gray-100 dark:border-gray-700/50 transition-colors">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-[#CBD5E1] dark:bg-[#475569]"></span>
-                        <span class="text-[10px] text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">Regular</span>
+                        <span class="w-2 h-2 rounded-full bg-[#CBD5E1] dark:bg-[#475569]"></span><span class="text-[10px] text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">Regular</span>
                     </div>
-                    <div class="text-right flex items-baseline gap-1">
-                        <span class="text-xs font-bold text-brand-dark dark:text-white">${countRegular.toLocaleString()}</span>
-                        <span class="text-[9px] font-bold text-gray-400">${regPct}%</span>
-                    </div>
+                    <div class="text-right flex items-baseline gap-1"><span class="text-xs font-bold text-brand-dark dark:text-white">${countRegular.toLocaleString()}</span><span class="text-[9px] font-bold text-gray-400">${regPct}%</span></div>
                 </div>
                 <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-800/30 px-3 py-2 rounded-xl border border-gray-100 dark:border-gray-700/50 mt-1.5 transition-colors">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-brand-blue"></span>
-                        <span class="text-[10px] text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">Early Bird</span>
+                        <span class="w-2 h-2 rounded-full bg-brand-blue"></span><span class="text-[10px] text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">Early Bird</span>
                     </div>
-                    <div class="text-right flex items-baseline gap-1">
-                        <span class="text-xs font-bold text-brand-dark dark:text-white">${countEarly.toLocaleString()}</span>
-                        <span class="text-[9px] font-bold text-gray-400">${earlyPct}%</span>
-                    </div>
+                    <div class="text-right flex items-baseline gap-1"><span class="text-xs font-bold text-brand-dark dark:text-white">${countEarly.toLocaleString()}</span><span class="text-[9px] font-bold text-gray-400">${earlyPct}%</span></div>
                 </div>
                 <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-800/30 px-3 py-2 rounded-xl border border-gray-100 dark:border-gray-700/50 mt-1.5 transition-colors">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-brand-orange"></span>
-                        <span class="text-[10px] text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">VIP Pass</span>
+                        <span class="w-2 h-2 rounded-full bg-brand-orange"></span><span class="text-[10px] text-gray-600 dark:text-gray-300 font-bold uppercase tracking-wider">VIP Pass</span>
                     </div>
-                    <div class="text-right flex items-baseline gap-1">
-                        <span class="text-xs font-bold text-brand-dark dark:text-white">${countVIP.toLocaleString()}</span>
-                        <span class="text-[9px] font-bold text-gray-400">${vipPct}%</span>
-                    </div>
+                    <div class="text-right flex items-baseline gap-1"><span class="text-xs font-bold text-brand-dark dark:text-white">${countVIP.toLocaleString()}</span><span class="text-[9px] font-bold text-gray-400">${vipPct}%</span></div>
                 </div>
             `;
 
@@ -634,7 +618,6 @@
             const tooltipBg = isDark ? '#1E293B' : '#ffffff';
             const tooltipText = isDark ? '#F8FAFC' : '#0F172A';
             const tooltipBorder = isDark ? '#334155' : '#E2E8F0';
-
             const ctx = document.getElementById('ticketChart').getContext('2d');
             const chartData = [countRegular, countEarly, countVIP];
             const chartColors = [isDark ? '#475569' : '#CBD5E1', '#3B82F6', '#F97316'];
@@ -650,45 +633,23 @@
             } else {
                 window.chartInstance = new Chart(ctx, {
                     type: 'doughnut',
-                    data: {
-                        labels: ['Regular', 'Early Bird', 'VIP Pass'],
-                        datasets: [{
-                            data: chartData,
-                            backgroundColor: chartColors,
-                            borderWidth: 0,
-                            hoverOffset: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false, cutout: '82%',
-                        plugins: { 
-                            legend: { display: false },
-                            tooltip: {
-                                backgroundColor: tooltipBg, titleColor: tooltipText, bodyColor: tooltipText, borderColor: tooltipBorder,
-                                titleFont: { family: 'Kanit', size: 10 }, bodyFont: { family: 'Kanit', size: 11, weight: 'bold' },
-                                padding: 10, cornerRadius: 8, displayColors: true, borderWidth: 1,
-                                callbacks: {
-                                    label: function(context) {
-                                        let value = context.raw || 0;
-                                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-                                        return ` ${context.label}: ${value.toLocaleString()} (${percentage}%)`;
-                                    }
-                                }
-                            }
-                        },
-                        animation: { duration: 1500, easing: 'easeOutQuart' }
-                    }
+                    data: { labels: ['Regular', 'Early Bird', 'VIP Pass'], datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 0, hoverOffset: 4 }] },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '82%', plugins: { legend: { display: false }, tooltip: { backgroundColor: tooltipBg, titleColor: tooltipText, bodyColor: tooltipText, borderColor: tooltipBorder, titleFont: { family: 'Kanit', size: 10 }, bodyFont: { family: 'Kanit', size: 11, weight: 'bold' }, padding: 10, cornerRadius: 8, displayColors: true, borderWidth: 1, callbacks: { label: function(context) { let total = context.dataset.data.reduce((a, b) => a + b, 0); let percentage = total > 0 ? Math.round((context.raw / total) * 100) : 0; return ` ${context.label}: ${context.raw.toLocaleString()} (${percentage}%)`; } } } }, animation: { duration: 1500, easing: 'easeOutQuart' } }
                 });
             }
         }
 
         function searchTable() {
             const input = document.getElementById("searchInput").value.toLowerCase();
+            const filterEl = document.getElementById("ticketFilter");
+            const filter = filterEl ? filterEl.value.toLowerCase() : "";
             const tr = document.getElementById("tableBody").getElementsByTagName("tr");
+            
             for (let i = 0; i < tr.length; i++) {
                 const text = tr[i].innerText.toLowerCase();
-                tr[i].style.display = text.includes(input) ? "" : "none";
+                const matchSearch = text.includes(input);
+                const matchFilter = filter === "" || text.includes(filter);
+                tr[i].style.display = (matchSearch && matchFilter) ? "" : "none";
             }
         }
 
@@ -710,63 +671,40 @@
             document.getElementById('certNameDisplay').innerText = name;
             window.currentCertName = name;
             window.currentCertTicket = ticket;
-
             const isVIP = ticket.includes('VIP');
-            
-            const printArea = document.getElementById('certPrintArea');
             const ribbon = document.getElementById('certRibbon');
             const bgGlow = document.getElementById('certBgGlow');
-            
             const titleTextEn = document.getElementById('certTitleEn');
             const titleTextTh = document.getElementById('certTitleTh');
             const nameText = document.getElementById('certNameDisplay');
-            
             const patternBg = document.getElementById('certPatternBg');
             const vipFrame = document.getElementById('certVipFrame');
             const corners = document.querySelectorAll('.cert-corner');
             const borders = document.querySelectorAll('.cert-border');
-            
             const sealRed = document.getElementById('certSealRed');
             const sealGold = document.getElementById('certSealGold');
             const sealContainer = document.getElementById('certSealContainer');
             const sealText = document.getElementById('certSealText');
 
             if (isVIP) {
-                ribbon.classList.remove('hidden');
-                bgGlow.classList.remove('hidden');
-                vipFrame.classList.remove('hidden');
-                borders.forEach(b => b.classList.add('hidden'));
-                patternBg.className = 'cert-qsncc-bg-gold opacity-[0.12]';
-                
+                ribbon.classList.remove('hidden'); bgGlow.classList.remove('hidden'); vipFrame.classList.remove('hidden');
+                borders.forEach(b => b.classList.add('hidden')); patternBg.className = 'cert-qsncc-bg-gold opacity-[0.12]';
                 titleTextEn.classList.add('text-gold-shine'); titleTextEn.classList.remove('text-[#B05E3C]');
                 titleTextTh.classList.add('text-gold-shine'); titleTextTh.classList.remove('text-[#B05E3C]');
                 nameText.classList.add('text-gold-shine'); nameText.classList.remove('text-[#B05E3C]');
-                
                 corners.forEach(c => { c.classList.remove('text-[#B05E3C]'); c.classList.add('text-[#D4AF37]'); });
-
-                sealRed.classList.replace('opacity-90', 'opacity-0');
-                sealGold.classList.replace('opacity-0', 'opacity-100');
-                sealContainer.classList.add('bg-gradient-to-br', 'from-[#FFF8E7]', 'to-[#FDF5E6]', 'border-[#D4AF37]', 'shadow-[0_4px_15px_rgba(212,175,55,0.3)]');
-                sealContainer.classList.remove('bg-white', 'border-gray-100');
+                sealRed.classList.replace('opacity-90', 'opacity-0'); sealGold.classList.replace('opacity-0', 'opacity-100');
+                sealContainer.classList.add('bg-gradient-to-br', 'from-[#FFF8E7]', 'to-[#FDF5E6]', 'border-[#D4AF37]', 'shadow-[0_4px_15px_rgba(212,175,55,0.3)]'); sealContainer.classList.remove('bg-white', 'border-gray-100');
                 sealText.classList.replace('text-gray-400', 'text-[#D4AF37]');
-                
             } else {
-                ribbon.classList.add('hidden');
-                bgGlow.classList.add('hidden');
-                vipFrame.classList.add('hidden');
-                borders.forEach(b => b.classList.remove('hidden'));
-                patternBg.className = 'cert-qsncc-bg opacity-[0.04]';
-                
+                ribbon.classList.add('hidden'); bgGlow.classList.add('hidden'); vipFrame.classList.add('hidden');
+                borders.forEach(b => b.classList.remove('hidden')); patternBg.className = 'cert-qsncc-bg opacity-[0.04]';
                 titleTextEn.classList.remove('text-gold-shine'); titleTextEn.classList.add('text-[#B05E3C]');
                 titleTextTh.classList.remove('text-gold-shine'); titleTextTh.classList.add('text-[#B05E3C]');
                 nameText.classList.remove('text-gold-shine'); nameText.classList.add('text-[#B05E3C]');
-                
                 corners.forEach(c => { c.classList.add('text-[#B05E3C]'); c.classList.remove('text-[#D4AF37]'); });
-
-                sealRed.classList.replace('opacity-0', 'opacity-90');
-                sealGold.classList.replace('opacity-100', 'opacity-0');
-                sealContainer.classList.remove('bg-gradient-to-br', 'from-[#FFF8E7]', 'to-[#FDF5E6]', 'border-[#D4AF37]', 'shadow-[0_4px_15px_rgba(212,175,55,0.3)]');
-                sealContainer.classList.add('bg-white', 'border-gray-100');
+                sealRed.classList.replace('opacity-0', 'opacity-90'); sealGold.classList.replace('opacity-100', 'opacity-0');
+                sealContainer.classList.remove('bg-gradient-to-br', 'from-[#FFF8E7]', 'to-[#FDF5E6]', 'border-[#D4AF37]', 'shadow-[0_4px_15px_rgba(212,175,55,0.3)]'); sealContainer.classList.add('bg-white', 'border-gray-100');
                 sealText.classList.replace('text-[#D4AF37]', 'text-gray-400');
             }
 
@@ -787,117 +725,31 @@
             const originalText = btn.innerHTML;
             btn.innerHTML = 'กำลังบันทึกภาพ...'; 
             btn.disabled = true;
-
             const isVIP = window.currentCertTicket && window.currentCertTicket.includes('VIP');
 
             if (isVIP) {
-                document.getElementById('certTitleEn').classList.remove('text-gold-shine');
-                document.getElementById('certTitleEn').style.color = '#D4AF37'; 
-                document.getElementById('certTitleTh').classList.remove('text-gold-shine');
-                document.getElementById('certTitleTh').style.color = '#D4AF37'; 
-                document.getElementById('certNameDisplay').classList.remove('text-gold-shine');
-                document.getElementById('certNameDisplay').style.color = '#D4AF37'; 
-                
-                document.querySelector('#certRibbon > div').classList.remove('bg-gold-shine');
-                document.querySelector('#certRibbon > div').style.background = '#D4AF37';
+                document.getElementById('certTitleEn').classList.remove('text-gold-shine'); document.getElementById('certTitleEn').style.color = '#D4AF37'; 
+                document.getElementById('certTitleTh').classList.remove('text-gold-shine'); document.getElementById('certTitleTh').style.color = '#D4AF37'; 
+                document.getElementById('certNameDisplay').classList.remove('text-gold-shine'); document.getElementById('certNameDisplay').style.color = '#D4AF37'; 
+                document.querySelector('#certRibbon > div').classList.remove('bg-gold-shine'); document.querySelector('#certRibbon > div').style.background = '#D4AF37';
             }
 
             setTimeout(() => {
-                html2canvas(printArea, { scale: 3, backgroundColor: '#FCFBF8', useCORS: true, allowTaint: true, logging: false })
-                .then(canvas => {
+                html2canvas(printArea, { scale: 3, backgroundColor: '#FCFBF8', useCORS: true, allowTaint: true, logging: false }).then(canvas => {
                     const link = document.createElement('a');
                     link.download = `Certificate_${window.currentCertName.replace(/\s+/g, '_')}.png`;
                     link.href = canvas.toDataURL('image/png'); link.click();
-                    
                     if (isVIP) {
-                        document.getElementById('certTitleEn').classList.add('text-gold-shine');
-                        document.getElementById('certTitleEn').style.color = 'transparent';
-                        document.getElementById('certTitleTh').classList.add('text-gold-shine');
-                        document.getElementById('certTitleTh').style.color = 'transparent';
-                        document.getElementById('certNameDisplay').classList.add('text-gold-shine');
-                        document.getElementById('certNameDisplay').style.color = 'transparent';
-                        
-                        document.querySelector('#certRibbon > div').classList.add('bg-gold-shine');
-                        document.querySelector('#certRibbon > div').style.background = '';
+                        document.getElementById('certTitleEn').classList.add('text-gold-shine'); document.getElementById('certTitleEn').style.color = 'transparent';
+                        document.getElementById('certTitleTh').classList.add('text-gold-shine'); document.getElementById('certTitleTh').style.color = 'transparent';
+                        document.getElementById('certNameDisplay').classList.add('text-gold-shine'); document.getElementById('certNameDisplay').style.color = 'transparent';
+                        document.querySelector('#certRibbon > div').classList.add('bg-gold-shine'); document.querySelector('#certRibbon > div').style.background = '';
                     }
-
                     btn.innerHTML = originalText; btn.disabled = false;
                     Swal.fire({ title: 'บันทึกสำเร็จ!', icon: 'success', timer: 1500, showConfirmButton: false });
                 });
             }, 500); 
         }
-
-        window.onload = () => {
-            fetchData();
-            setInterval(() => { fetchData(true); }, 1000);
-        };
-
-        // ==========================================
-        // ส่วนเสริมฟีเจอร์ใหม่ (Add-ons Script)
-        // ==========================================
-
-        // 1. เขียนทับ (Override) ฟังก์ชันค้นหาตารางเดิม เพื่อให้รองรับ Dropdown Filter
-        window.searchTable = function() {
-            const input = document.getElementById("searchInput").value.toLowerCase();
-            const filterEl = document.getElementById("ticketFilter");
-            const filter = filterEl ? filterEl.value.toLowerCase() : "";
-            const tr = document.getElementById("tableBody").getElementsByTagName("tr");
-            
-            for (let i = 0; i < tr.length; i++) {
-                const text = tr[i].innerText.toLowerCase();
-                // ค้นหาทั้งจากช่องพิมพ์ (input) และ Dropdown (filter)
-                const matchSearch = text.includes(input);
-                const matchFilter = filter === "" || text.includes(filter);
-                
-                tr[i].style.display = (matchSearch && matchFilter) ? "" : "none";
-            }
-        };
-
-        // 2. แทรกลอจิกนับจำนวน Workshop เข้าไปในกระบวนการประมวลผลข้อมูล (processData)
-        const originalProcessData = window.processData;
-        window.processData = function(data, isSilent = false) {
-            originalProcessData(data, isSilent); // รันโค้ดเดิมก่อน
-            
-            // ลอจิกใหม่: คำนวณและแสดงผล Top Workshops
-            if(data.length > 1) {
-                const rows = data.slice(1);
-                const wsCount = {};
-                
-                rows.forEach(row => {
-                    const ws = row[8] && row[8] !== "-" && row[8] !== "None" ? String(row[8]) : null;
-                    if(ws) wsCount[ws] = (wsCount[ws] || 0) + (parseInt(row[7]) || 1);
-                });
-
-                const sortedWs = Object.entries(wsCount).sort((a, b) => b[1] - a[1]).slice(0, 3);
-                const container = document.getElementById('workshopStats');
-                
-                if(container) {
-                    container.innerHTML = sortedWs.length > 0 ? sortedWs.map((ws, index) => `
-                        <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-800/40 px-3 py-2.5 rounded-xl border border-gray-100 dark:border-gray-700/50 hover:border-brand-orange/30 transition-all">
-                            <div class="flex items-center gap-2.5 overflow-hidden">
-                                <div class="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold ${index === 0 ? 'bg-orange-100 dark:bg-orange-900/30 text-brand-orange' : 'bg-gray-200 dark:bg-gray-700 text-gray-500'}">#${index + 1}</div>
-                                <span class="text-[11px] text-gray-700 dark:text-gray-300 font-medium truncate max-w-[140px]" title="${ws[0]}">${ws[0]}</span>
-                            </div>
-                            <span class="text-[10px] font-bold text-brand-dark dark:text-white bg-white dark:bg-[#111827] px-2 py-1 rounded-md shadow-sm border border-gray-100 dark:border-gray-700">${ws[1]}</span>
-                        </div>
-                    `).join('') : '<div class="text-center text-xs text-gray-400 py-3">ยังไม่มีข้อมูลเวิร์กชอป</div>';
-                }
-            }
-        };
-
-        // 3. ดักจับตอนที่ดึงข้อมูล (fetchData) เพื่ออัปเดตเวลาล่าสุดและแสดงสถานะ Real-time Live
-const originalFetchData = window.fetchData;
-window.fetchData = function(isSilent = false) {
-    originalFetchData(isSilent); // รันโค้ดดึงข้อมูลเดิม
-    
-    // อัปเดตเวลาแสดงผล พร้อมเพิ่มจุดสีเขียวกระพริบ (Live Status)
-    const timeStr = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const syncEl = document.getElementById('lastSyncTime');
-    if(syncEl) {
-        // ใส่จุดสีเขียวมีเงาเรืองแสง และอนิเมชั่นกระพริบ (Pulse)
-        syncEl.innerHTML = `<span class="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 mb-0.5 shadow-[0_0_8px_#10B981] animate-pulse"></span>${timeStr}`;
-    }
-};
     </script>
 </body>
 </html>
